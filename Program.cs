@@ -29,10 +29,8 @@ namespace Diary {
 		static void Main(string[] args) {
 			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.Bad);
 			oneNote.editNote("Измененная запись");
-			//Console.WriteLine(oneNote.getNote());
 
 			Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
-			//Console.WriteLine(twoNote.getNote());
 
 			Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
 
@@ -45,13 +43,14 @@ namespace Diary {
 								new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
 							  );
 
-            //notes.deleteNotes(twoNote, threeNote);
-            //notes.getNote(1).editNote("Повторно измененная запись", Mood.Great);
-            notes.editNotes(1, "Дополнительно измененная запись", Mood.Great);
-            
+            notes.editNotes(2, "Дополнительно измененная запись", Mood.Great);      // редактирование записи в ежедневнике
+            Note fourNote = new Note();
+            notes.deleteNotes(fourNote);   // удаление записи из ежедневника
 
 
-            Console.WriteLine(notes.getNote(1).prntNote());
+            for (int i = 1; i <= notes.Count; ++i) {
+                Console.WriteLine(notes.getNote((uint)i).prntNote());
+            }
 
             Console.WriteLine(notes.Count);
 		}

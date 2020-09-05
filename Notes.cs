@@ -18,7 +18,6 @@ namespace Diary {
 
         #endregion // Fields
 
-        #region HIDE
         /// <summary>
         /// Показывает количество элементов в массиве-ежедневнике
         /// </summary>
@@ -26,17 +25,6 @@ namespace Diary {
             get { return count; }
         }
 
-        /// <summary>
-        /// Индексатор для массива записей (notes)
-        /// </summary>
-        /// <param name="index">Индекс массива записей (notes)</param>
-        /// <returns></returns>
-        //public Note this[int index] {
-        //    get { return index < count ? notes[index] : new Note(); }       // если записи не существует, то возвращает запись по умолчанию
-        //    set { if (index < count) notes[index] = value; }
-        //}
-
-        #endregion  // HIDE
         #region Constructors and Methods
 
         // Конструкторы и Методы
@@ -54,9 +42,9 @@ namespace Diary {
             int i;
 
             for (i = 0; i < count; ++i) {
-                if (notes[i].Id_Note == id) {
-                    notes[i].Notation = newNotation;
-                    notes[i].WhatMood = newWhatMood;
+                if (this.notes[i].Id_Note == id) {
+                    this.notes[i].Notation = newNotation;
+                    this.notes[i].WhatMood = newWhatMood;
                     return;
                 }
             }
@@ -73,7 +61,7 @@ namespace Diary {
             int i;
 
             for (i = 0; i < count; ++i) {
-                if (notes[i].Id_Note == id) break;
+                if (this.notes[i].Id_Note == id) break;
             }
 
             return i == count ? new Note() : notes[i];      // если индекс нашелся в цикле, то возвращаем запись с совпавшим индексом
@@ -85,7 +73,7 @@ namespace Diary {
         /// </summary>
         /// <param name="args">Добавляемая(-ые) запись(-и)</param>
         public void insertNotes(params Note[] args) {
-            Array.Resize(ref this.notes, count + args.Length);
+            Array.Resize(ref this.notes, this.count + args.Length);
 
             foreach (Note note in args) {
                 this.notes[count++] = note;
@@ -98,11 +86,11 @@ namespace Diary {
         /// <param name="id">ID записи (свойство Id_Note, начинаются с 1)</param>
         public void deleteNotes(uint id) {
             // id записи не может быть < 1
-            if (id > 0) {
+            if (id > 0 && id < this.count) {
                 Note[] notesTmp = new Note[this.count - 1];
                 int i = 0;  // счетчик для индекса массива notesTmp
 
-                foreach (Note note in notes) {
+                foreach (Note note in this.notes) {
                     if (note.Id_Note != id) {
                         notesTmp[i++] = note;
                     }
@@ -131,8 +119,6 @@ namespace Diary {
             }
 
         }
-
-        
 
         #endregion
 

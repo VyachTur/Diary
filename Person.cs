@@ -71,7 +71,7 @@ namespace Diary {
 			this(Family, Name, String.Empty, new DateTime(1900, 1, 1)) { }
 
 		/// <summary>
-		/// Возвращает информацию о персоне
+		/// Возвращает информацию о персоне в виде строки
 		/// </summary>
 		/// <returns>Строка с инфой о ФИО и ДР персоны</returns>
 		public string prntPerson() {
