@@ -7,6 +7,22 @@ using System.Threading.Tasks;
 
 namespace Diary {
     /// <summary>
+    /// Сортировка
+    /// </summary>
+    enum Order {
+        Asc = 1,    // По возрастанию
+        Desc        // По убыванию
+    }
+
+    enum FieldsNote {
+        Id = 1,     // Id
+        DateT,      // Дата и время
+        Notat,      // Текст записи
+        Wr,         // Кто сделал запись
+        MoodWr      // Настроение
+    }
+
+    /// <summary>
     /// Структура реализующая ежедневник
     /// </summary>
     struct Notes {
@@ -120,7 +136,53 @@ namespace Diary {
 
         }
 
-        #endregion
+
+        /// <summary>
+        /// Сортировка ежедневника по заданному полю
+        /// </summary>
+        /// <param name="fn">Поле по которому происходит сортировка</param>
+        /// <param name="order">Порядок сортировки (по убыванию/по возрастанию)</param>
+        public void sortNotes(FieldsNote fn, Order order = Order.Asc) {
+
+        }
+
+
+
+        // МЕТОДЫ ДЛЯ РАБОТЫ С ФАЙЛАМИ
+
+        // - Загрузка данных из файла
+        // - Выгрузка данных в файл
+        // - Добавления данных в текущий ежедневник из выбранного файла
+        // - Импорт записей по выбранному диапазону дат
+
+
+        /// <summary>
+        /// Загружает данные в ежедневник из файла
+        /// (если в ежедневнике есть файлы, то происходит добавление)
+        /// </summary>
+        /// <param name="path">Путь к файлу-ежедневнику</param>
+        public void loadNotes(string path) {
+
+        }
+
+        /// <summary>
+        /// Перегруженный метод, загружает данные в ежедневник из файла 
+        /// (если в ежедневнике есть файлы, то происходит добавление, добавление происходит в диапазоне дат)
+        /// </summary>
+        /// <param name="path">Путь к файлу-ежедневнику</param>
+        public void loadNotes(string path, DateTime from, DateTime to) {
+
+        }
+
+        /// <summary>
+        /// Выгружает данные из ежедневника в файл
+        /// </summary>
+        /// <param name="path">Путь к файлу-ежедневнику</param>
+        public void unloadNotes(string path) {
+
+        }
+
+        #endregion  // Constructors and Methods
 
     }
 }

@@ -24,7 +24,6 @@ namespace Diary {
 		// Поля
 		private uint id_Note;					// id-записи
 		private static uint countNotes = 0;     // количество созданных записей (объектов структуры Note)
-		private bool isFinalize;                // финализирована ли запись (можно ли вносить в нее изменения)
 
 		private Mood whatMood;                  // настроение во время создания или редактирования записи
 		private string notation;				// текст записи
@@ -52,7 +51,7 @@ namespace Diary {
 		/// </summary>
 		public string Notation { 
 			get { return this.notation; } 
-			set { if (!isFinalize) this.notation = value; }	// если запись помечена как законченная (финализирована), то правит ее нельзя
+			set { this.notation = value; }	// если запись помечена как законченная (финализирована), то правит ее нельзя
 		}
 		/// <summary>
 		/// Пользователь создавший запись
@@ -64,17 +63,8 @@ namespace Diary {
 		/// </summary>
 		public Mood WhatMood { 
 			get { return this.whatMood; } 
-			set { if (!isFinalize) this.whatMood = value; }	// если запись финализирована, то править ее нельзя
+			set { this.whatMood = value; }	// если запись финализирована, то править ее нельзя
 		}
-
-		/// <summary>
-		/// Финализирована ли запись?
-		/// </summary>
-		public bool IsFinalize {
-			get {
-				return isFinalize;
-            }
-        }
 
 
 		#endregion  // Properties
@@ -92,7 +82,6 @@ namespace Diary {
 		/// <param name="whatMood">Настроение</param>
 		public Note(string notation, Person Writer, Mood whatMood) {
 			this.id_Note = ++countNotes;
-			this.isFinalize = false;
 			this.Datetime_Note = DateTime.Now;
 			this.Writer = Writer;
             this.whatMood = whatMood;
@@ -104,13 +93,6 @@ namespace Diary {
 		/// <param name="Notation">Текст записи</param>
 		/// <param name="Writer">Пользователь создающий запись</param>
 		public Note(string Notation, Person Writer) : this(Notation, Writer, Mood.Great) { }
-
-		/// <summary>
-		/// Финализирует запись (после финализации запись изменять нельзя)
-		/// </summary>
-		public void finalizeNote() {
-			if(!isFinalize) isFinalize = true;
-        }
 
         /// <summary>
         /// Редактирование записи (в записи после создания можно изменять только текст записи (Notation) и настроение (WhatMood)
@@ -134,8 +116,7 @@ namespace Diary {
 						$"DateTime Note: {this.Datetime_Note}\n" +
 						$"Notation: {this.notation}\n" +
 						$"Writer: {this.Writer.prntPerson()}\n" +
-						$"Mood: {this.whatMood}\n" +
-						$"Is Finalize: {this.isFinalize}\n";
+						$"Mood: {this.whatMood}\n";
 			}
 
 			return String.Empty;	// если данных в записи нет, то возвращаем пустую строку
