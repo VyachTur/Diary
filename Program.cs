@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Diary {
+	class Program {
+		static void Main(string[] args) {
+			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"));
+			oneNote.editNote("Измененная запись");
+			//Console.WriteLine(oneNote.getNote());
+
+			Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
+			//Console.WriteLine(twoNote.getNote());
+
+			Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
+
+            Notes notes = new Notes(oneNote, twoNote);
+
+            notes.insertNotes(threeNote);   // добавляем запись в ежедневник
+
+			notes.insertNotes(	new Note("Четвертая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
+								new Note("Пятая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
+								new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
+							  );
+
+            //notes.deleteNotes(twoNote, threeNote);
+
+            //// В данном случае метод меняет запись
+            //Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"));
+            //oneNote.editNote("Запись поменялась", Mood.Good);
+
+            //// А здесь не меняет
+            //Notes notes = new Notes(oneNote);
+            notes[0].editNote("Запись не поменялась", Mood.Bad);
+
+
+
+            Console.WriteLine(notes[0].getNote());
+
+   //         Console.WriteLine(notes[0].getNote());
+			//Console.WriteLine(notes[1].getNote());
+   //         Console.WriteLine(notes[2].getNote());
+			//Console.WriteLine(notes[3].getNote());
+			//Console.WriteLine(notes[4].getNote());
+			Console.WriteLine(notes.Count);
+		}
+	}
+}
+
+
+//string inputString = "2000-02-02";
+//DateTime dDate;
+
+//if (DateTime.TryParse(inputString, out dDate)) {
+//    String.Format("{0:d/MM/yyyy}", dDate);
+//}
+//else {
+//    Console.WriteLine("Invalid"); // <-- Control flow goes here
+//}
