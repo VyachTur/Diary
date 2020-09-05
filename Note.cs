@@ -127,13 +127,13 @@ namespace Diary {
         /// Возвращает информацию о записи
         /// </summary>
         /// <returns>Строка с данными о записи (ID, Дата и время, Текст записи, Кто сделал запись, Настроение пишущего, Финализирована ли запись?</returns>
-        public string getNote() {
+        public string prntNote() {
 			// Возвращаем данные в записи, если они есть
 			if (!String.IsNullOrEmpty(notation)) {
 				return $"ID: {this.id_Note}\n" +
 						$"DateTime Note: {this.Datetime_Note}\n" +
 						$"Notation: {this.notation}\n" +
-						$"Writer: {this.Writer.getPerson()}\n" +
+						$"Writer: {this.Writer.prntPerson()}\n" +
 						$"Mood: {this.whatMood}\n" +
 						$"Is Finalize: {this.isFinalize}\n";
 			}

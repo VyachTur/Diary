@@ -45,26 +45,13 @@ namespace Diary {
 								new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
 							  );
 
-            //notes.deleteNotes(twoNote, threeNote);
-
-            //// В данном случае метод меняет запись
-            //Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"));
-            //oneNote.editNote("Запись поменялась", Mood.Good);
-
-            //// А здесь не меняет
-            //Notes notes = new Notes(oneNote);
-            notes[0].editNote("Запись не поменялась", Mood.Bad);
+            notes.deleteNotes(twoNote, threeNote);
 
 
 
-            Console.WriteLine(notes[0].getNote());
+            Console.WriteLine(notes.getNote(5).prntNote());
 
-   //         Console.WriteLine(notes[0].getNote());
-			//Console.WriteLine(notes[1].getNote());
-   //         Console.WriteLine(notes[2].getNote());
-			//Console.WriteLine(notes[3].getNote());
-			//Console.WriteLine(notes[4].getNote());
-			Console.WriteLine(notes.Count);
+            Console.WriteLine(notes.Count);
 		}
 	}
 }

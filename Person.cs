@@ -74,7 +74,7 @@ namespace Diary {
 		/// Возвращает информацию о персоне
 		/// </summary>
 		/// <returns>Строка с инфой о ФИО и ДР персоны</returns>
-		public string getPerson() {
+		public string prntPerson() {
 			return $"{this.Family} {this.Name} {this.Sirname}, {this.BirthDate.ToShortDateString()}";
         }
 

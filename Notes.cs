@@ -30,10 +30,10 @@ namespace Diary {
         /// </summary>
         /// <param name="index">Индекс массива записей (notes)</param>
         /// <returns></returns>
-        public Note this[int index] {
-            get { return index < count ? notes[index] : new Note(); }       // если записи не существует, то возвращает запись по умолчанию
-            set { if (index < count) notes[index] = value; }
-        }
+        //public Note this[int index] {
+        //    get { return index < count ? notes[index] : new Note(); }       // если записи не существует, то возвращает запись по умолчанию
+        //    set { if (index < count) notes[index] = value; }
+        //}
 
 
         #region Constructors and Methods
@@ -47,6 +47,22 @@ namespace Diary {
         public Notes(params Note[] args) {
             notes = args;
             count = args.Length;    // меняем значение количества элементов в массиве-ежедневнике
+        }
+
+        /// <summary>
+        /// Возвращает запись по ее id
+        /// </summary>
+        /// <param name="id">Идентификатор записи в ежедневнике</param>
+        /// <returns></returns>
+        public Note getNote(uint id) {
+            int i;
+
+            for (i = 0; i < count; ++i) {
+                if (notes[i].Id_Note == id) break;
+            }
+
+            return i == count ? new Note() : notes[i];      // если индекс нашелся в цикле, то возвращаем запись с совпавшим индексом
+                                                            // иначе возвращаем "пустую" запись
         }
 
         /// <summary>
