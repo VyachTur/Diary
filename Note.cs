@@ -117,7 +117,7 @@ namespace Diary {
         /// </summary>
         /// <param name="newNotation">Новая измененная запись</param>
         /// <param name="newWhatMood">Новое настроение (по умолчанию хорошее(Great))</param>
-        public void editNote(string newNotation, Mood newWhatMood = Mood.Great) {
+        public void editNote(string newNotation, Mood newWhatMood = Mood.Good) {
             // Если запись финализирована, то поменять ее не получится
             this.Notation = newNotation;
             this.WhatMood = newWhatMood;

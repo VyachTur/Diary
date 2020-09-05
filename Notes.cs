@@ -18,6 +18,7 @@ namespace Diary {
 
         #endregion // Fields
 
+        #region HIDE
         /// <summary>
         /// Показывает количество элементов в массиве-ежедневнике
         /// </summary>
@@ -35,7 +36,7 @@ namespace Diary {
         //    set { if (index < count) notes[index] = value; }
         //}
 
-
+        #endregion  // HIDE
         #region Constructors and Methods
 
         // Конструкторы и Методы
@@ -47,6 +48,20 @@ namespace Diary {
         public Notes(params Note[] args) {
             notes = args;
             count = args.Length;    // меняем значение количества элементов в массиве-ежедневнике
+        }
+
+        public void editNotes(uint id, string newNotation, Mood newWhatMood = Mood.Good) {
+            int i;
+
+            for (i = 0; i < count; ++i) {
+                if (notes[i].Id_Note == id) {
+                    notes[i].Notation = newNotation;
+                    notes[i].WhatMood = newWhatMood;
+                    return;
+                }
+            }
+
+            //getNote(id).editNote(newNotation, newWhatMood);
         }
 
         /// <summary>
