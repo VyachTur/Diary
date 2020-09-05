@@ -24,6 +24,7 @@ namespace Diary {
     /// - Импорт записей по выбранному диапазону дат
     /// - Упорядочивания записей ежедневника по выбранному полю
     #endregion
+
     class Program {
 		static void Main(string[] args) {
 			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"));
