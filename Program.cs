@@ -30,7 +30,7 @@ namespace Diary {
 			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.Bad);
 			oneNote.editNote("Измененная запись");
 
-			Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
+			Note twoNote = new Note("Вторая пробная запись", new Person("Якушев", "Павел", "Павлович", new DateTime(1986, 7, 1)));
 
 			Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
 
@@ -38,7 +38,7 @@ namespace Diary {
 
             notes.insertNotes(threeNote);   // добавляем запись в ежедневник
 
-			notes.insertNotes(	new Note("Четвертая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
+			notes.insertNotes(	new Note("Четвертая пробная запись", new Person("Шустров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
 								new Note("Пятая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
 								new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
 							  );
@@ -47,6 +47,12 @@ namespace Diary {
             Note fourNote = new Note();
             notes.deleteNotes(fourNote);   // удаление записи из ежедневника
 
+
+            for (int i = 1; i <= notes.Count; ++i) {
+                Console.WriteLine(notes.getNote((uint)i).prntNote());
+            }
+
+            notes.sortNotes(FieldsNote.Wr);
 
             for (int i = 1; i <= notes.Count; ++i) {
                 Console.WriteLine(notes.getNote((uint)i).prntNote());

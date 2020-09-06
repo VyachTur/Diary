@@ -4,23 +4,16 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Diary.Note;
 
 namespace Diary {
-    /// <summary>
-    /// Сортировка
-    /// </summary>
-    enum Order {
-        Asc = 1,    // По возрастанию
-        Desc        // По убыванию
-    }
-
-    enum FieldsNote {
-        Id = 1,     // Id
-        DateT,      // Дата и время
-        Notat,      // Текст записи
-        Wr,         // Кто сделал запись
-        MoodWr      // Настроение
-    }
+    //enum FieldsNote {
+    //    Id = 1,     // Id
+    //    DateT,      // Дата и время
+    //    Notat,      // Текст записи
+    //    Wr,         // Кто сделал запись
+    //    MoodWr      // Настроение
+    //}
 
     /// <summary>
     /// Структура реализующая ежедневник
@@ -142,8 +135,9 @@ namespace Diary {
         /// </summary>
         /// <param name="fn">Поле по которому происходит сортировка</param>
         /// <param name="order">Порядок сортировки (по убыванию/по возрастанию)</param>
-        public void sortNotes(FieldsNote fn, Order order = Order.Asc) {
-
+        public void sortNotes(FieldsNote fn) {
+            Note.sortField = fn;
+            Array.Sort(notes, new NoteComparer());
         }
 
 
