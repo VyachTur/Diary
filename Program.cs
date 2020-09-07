@@ -57,7 +57,7 @@ namespace Diary {
             //Note fourNote = new Note();
             //notes.deleteNotes(twoNote);   // удаление записи из ежедневника
 
-            notes.sortNotes(FieldsNote.Notat);
+            notes.sortNotes(FieldsNote.MoodWr);
 
             //for (int i = 1; i <= notes.Count; ++i) {
             //    Console.WriteLine(notes.getNoteForId((uint)i).prntNote());
