@@ -142,72 +142,17 @@ namespace Diary {
 
         ///////////////////////////////////////СОРТИРОВКА//////////////////////////////////////////
 
-        ///// <summary>
-        ///// Меняет два объекта Note местами
-        ///// </summary>
-        ///// <param name="n1">Первое значение</param>
-        ///// <param name="n2">Второе значение</param>
-        //private void swapNotes(ref Note n1, ref Note n2) {
-        //    Note tmpNote = n1;
-        //    notes[j] = notes[j + 1];
-        //    notes[j + 1] = tmpNote;
-        //}
-
-        ///// <summary>
-        ///// Сортировка для записей в записной книге по Id записи и Настроению (Mood)
-        ///// </summary>
-        ///// <param name="uA">Первый параметр (значение поля)</param>
-        ///// <param name="uB">Второй параметр (значение поля)</param>
-        //private void sortForFields(uint uA, uint uB) {
-        //    for (int i = 0; i < this.count; ++i) {
-        //        for (int j = 0; j < this.count - 1; ++j) {
-        //            if (uA > uB) {
-        //                Note tmpNote = notes[j];
-        //                notes[j] = notes[j + 1];
-        //                notes[j + 1] = tmpNote;
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Перегруженнй метод для сортировки по Дате создания записи
-        ///// </summary>
-        ///// <param name="dtA">Первый параметр (значение поля)</param>
-        ///// <param name="dtB">Второй параметр (значение поля)</param>
-        //private void sortForFields(DateTime dtA, DateTime dtB) {
-        //    for (int i = 0; i < this.count; ++i) {
-        //        for (int j = 0; j < this.count - 1; ++j) {
-        //            if (dtA > dtB) {
-        //                Note tmpNote = notes[j];
-        //                notes[j] = notes[j + 1];
-        //                notes[j + 1] = tmpNote;
-        //            }
-        //        }
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Перегруженнй метод для сортировки по полям Текст записи и Пользователь создавший запись
-        ///// </summary>
-        ///// <param name="dtA">Первый параметр (значение поля)</param>
-        ///// <param name="dtB">Второй параметр (значение поля)</param>
-        //private void sortForFields(string strA, string strB) {
-        //    for (int i = 0; i < this.count; ++i) {
-        //        for (int j = 0; j < this.count - 1; ++j) {
-        //            if (String.Compare( strA, strB, true) == 1) {
-        //                Note tmpNote = notes[j];
-        //                notes[j] = notes[j + 1];
-        //                notes[j + 1] = tmpNote;
-        //            }
-        //        }
-        //    }
-        //}
-
         /// <summary>
-        /// Сортировка ежедневника по заданному полю (пузырьком)
+        /// Меняет два объекта Note местами
         /// </summary>
-        /// <param name="fn">Поле по которому происходит сортировка</param>
+        /// <param name="n1">Первое значение</param>
+        /// <param name="n2">Второе значение</param>
+        private void swapNotes(ref Note n1, ref Note n2) {
+            Note tmpNote = n1;
+            notes[j] = notes[j + 1];
+            notes[j + 1] = tmpNote;
+        }
+
         public void sortNotes(FieldsNote fn = FieldsNote.DateT) {
 
             switch (fn) {
