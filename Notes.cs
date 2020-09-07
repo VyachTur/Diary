@@ -33,7 +33,7 @@ namespace Diary {
             get { return count; }
         }
 
-        // Индексатор
+        // Индексатор get-only
         public Note this[int index] {
             get { return notes[index]; }
         }
