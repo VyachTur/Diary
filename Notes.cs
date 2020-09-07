@@ -149,8 +149,8 @@ namespace Diary {
         /// <param name="n2">Второе значение</param>
         private void swapNotes(ref Note n1, ref Note n2) {
             Note tmpNote = n1;
-            notes[j] = notes[j + 1];
-            notes[j + 1] = tmpNote;
+            n1 = n2;
+            n2 = tmpNote;
         }
 
         public void sortNotes(FieldsNote fn = FieldsNote.DateT) {
