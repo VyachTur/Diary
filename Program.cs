@@ -30,23 +30,13 @@ namespace Diary {
 			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.Bad);
 			oneNote.editNote("Измененная запись");
 
-            Console.ReadKey();
-
 			Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
-
-            Console.ReadKey();
 
             Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
 
-            Console.ReadKey();
-
             Notes notes = new Notes(oneNote, twoNote);
 
-            Console.ReadKey();
-
             notes.insertNotes(threeNote);   // добавляем запись в ежедневник
-
-            Console.ReadKey();
 
             notes.insertNotes(	new Note("Четвертая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
 								new Note("Пятая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
@@ -55,7 +45,7 @@ namespace Diary {
 
             notes.editNotes(2, "Дополнительно измененная запись", Mood.Great);      // редактирование записи в ежедневнике
             //Note fourNote = new Note();
-            //notes.deleteNotes(twoNote);   // удаление записи из ежедневника
+            notes.deleteNotes(twoNote);   // удаление записи из ежедневника
 
             //notes.sortNotes(FieldsNote.MoodWr);
             notes.sortNotes();
