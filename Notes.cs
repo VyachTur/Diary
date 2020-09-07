@@ -6,14 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Diary {
-    /// <summary>
-    /// Сортировка
-    /// </summary>
-    enum Order {
-        Asc = 1,    // По возрастанию
-        Desc        // По убыванию
-    }
-
     enum FieldsNote {
         Id = 1,     // Id
         DateT,      // Дата и время
@@ -141,9 +133,8 @@ namespace Diary {
         /// Сортировка ежедневника по заданному полю
         /// </summary>
         /// <param name="fn">Поле по которому происходит сортировка</param>
-        /// <param name="order">Порядок сортировки (по убыванию/по возрастанию)</param>
-        public void sortNotes(FieldsNote fn, Order order = Order.Asc) {
-
+        public void sortNotes(FieldsNote fn) {
+            
         }
 
 

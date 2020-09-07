@@ -69,6 +69,14 @@ namespace Diary {
 		/// <param name="Name">Имя</param>
 		public Person(string Family, string Name) :
 			this(Family, Name, String.Empty, new DateTime(1900, 1, 1)) { }
+		
+		/// <summary>
+		/// Вспомогательный метод для сортировки в массиве из объектов Person
+		/// </summary>
+		/// <returns>Строка для сортировки</returns>
+		public string stringForSort() {
+			return this.Family + this.Name + this.Sirname + this.BirthDate.ToShortDateString();
+        }
 
 		/// <summary>
 		/// Возвращает информацию о персоне в виде строки
