@@ -80,12 +80,6 @@ namespace Diary {
                                                             // иначе возвращаем "пустую" запись
         }
 
-        //public Note getNote(uint counter) {
-        //    if (counter >= 0 && counter < this.count) return notes[counter];
-
-        //    return new Note();  // если индекс за пределами массива notes, то возвращаем Note()
-        //}
-
         /// <summary>
         /// Добавляет запись(-и) в ежедневник
         /// </summary>
@@ -143,16 +137,9 @@ namespace Diary {
         ///////////////////////////////////////СОРТИРОВКА//////////////////////////////////////////
 
         /// <summary>
-        /// Меняет два объекта Note местами
+        /// Сортирует ежедневник
         /// </summary>
-        /// <param name="n1">Первое значение</param>
-        /// <param name="n2">Второе значение</param>
-        private void swapNotes(ref Note n1, ref Note n2) {
-            Note tmpNote = n1;
-            notes[j] = notes[j + 1];
-            notes[j + 1] = tmpNote;
-        }
-
+        /// <param name="fn">Поле по которому сортировать</param>
         public void sortNotes(FieldsNote fn = FieldsNote.DateT) {
 
             switch (fn) {
