@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -141,78 +142,81 @@ namespace Diary {
         /// </summary>
         /// <param name="fn">Поле по которому сортировать</param>
         public void sortNotes(FieldsNote fn = FieldsNote.DateT) {
-
-            switch (fn) {
-                case FieldsNote.Id:
-                    for (int i = 0; i < this.count; ++i) {
-                        for (int j = 0; j < this.count - 1; ++j) {
-                            if (notes[j].Id_Note > notes[j + 1].Id_Note) {
-                                Note tmpNote = notes[j];
-                                notes[j] = notes[j + 1];
-                                notes[j + 1] = tmpNote;
+            if (count > 1) {
+                switch (fn) {
+                    case FieldsNote.Id:
+                        
+                        for (int i = 0; i < this.count; ++i) {
+                            for (int j = 0; j < this.count - 1; ++j) {
+                                PropertyInfo pi = notes[j].GetType().GetProperty("Id_Note");
+                                if (notes[j].Id_Note > notes[j + 1].Id_Note) {
+                                    Note tmpNote = notes[j];
+                                    notes[j] = notes[j + 1];
+                                    notes[j + 1] = tmpNote;
+                                }
                             }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case FieldsNote.MoodWr:
-                    for (int i = 0; i < this.count; ++i) {
-                        for (int j = 0; j < this.count - 1; ++j) {
-                            if (notes[j].WhatMood > notes[j + 1].WhatMood) {
-                                Note tmpNote = notes[j];
-                                notes[j] = notes[j + 1];
-                                notes[j + 1] = tmpNote;
+                    case FieldsNote.MoodWr:
+                        for (int i = 0; i < this.count; ++i) {
+                            for (int j = 0; j < this.count - 1; ++j) {
+                                if (notes[j].WhatMood > notes[j + 1].WhatMood) {
+                                    Note tmpNote = notes[j];
+                                    notes[j] = notes[j + 1];
+                                    notes[j + 1] = tmpNote;
+                                }
                             }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case FieldsNote.DateT:
-                    for (int i = 0; i < this.count; ++i) {
-                        for (int j = 0; j < this.count - 1; ++j) {
-                            if (notes[j].Datetime_Note > notes[j + 1].Datetime_Note) {
-                                Note tmpNote = notes[j];
-                                notes[j] = notes[j + 1];
-                                notes[j + 1] = tmpNote;
+                    case FieldsNote.DateT:
+                        for (int i = 0; i < this.count; ++i) {
+                            for (int j = 0; j < this.count - 1; ++j) {
+                                if (notes[j].Datetime_Note > notes[j + 1].Datetime_Note) {
+                                    Note tmpNote = notes[j];
+                                    notes[j] = notes[j + 1];
+                                    notes[j + 1] = tmpNote;
+                                }
                             }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case FieldsNote.Notat:
-                    for (int i = 0; i < this.count; ++i) {
-                        for (int j = 0; j < this.count - 1; ++j) {
-                            if (String.Compare( notes[j].Notation, 
-                                                notes[j + 1].Notation, true) == 1) {
+                    case FieldsNote.Notat:
+                        for (int i = 0; i < this.count; ++i) {
+                            for (int j = 0; j < this.count - 1; ++j) {
+                                if (String.Compare(notes[j].Notation,
+                                                    notes[j + 1].Notation, true) == 1) {
 
-                                Note tmpNote = notes[j];
-                                notes[j] = notes[j + 1];
-                                notes[j + 1] = tmpNote;
+                                    Note tmpNote = notes[j];
+                                    notes[j] = notes[j + 1];
+                                    notes[j + 1] = tmpNote;
+                                }
                             }
                         }
-                    }
 
-                    break;
+                        break;
 
-                case FieldsNote.Wr:
-                    for (int i = 0; i < this.count; ++i) {
-                        for (int j = 0; j < this.count - 1; ++j) {
-                            if (String.Compare( notes[j].Writer.stringForSort(), 
-                                                notes[j + 1].Writer.stringForSort(),
-                                                true) == 1) {
+                    case FieldsNote.Wr:
+                        for (int i = 0; i < this.count; ++i) {
+                            for (int j = 0; j < this.count - 1; ++j) {
+                                if (String.Compare(notes[j].Writer.stringForSort(),
+                                                    notes[j + 1].Writer.stringForSort(),
+                                                    true) == 1) {
 
-                                Note tmpNote = notes[j];
-                                notes[j] = notes[j + 1];
-                                notes[j + 1] = tmpNote;
+                                    Note tmpNote = notes[j];
+                                    notes[j] = notes[j + 1];
+                                    notes[j + 1] = tmpNote;
+                                }
                             }
                         }
-                    }
 
-                    break;
+                        break;
 
+                }
             }
         }
 
