@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Diary {
     enum FieldsNote {
-        Id = 1,     // Id
-        DateT,      // Дата и время
-        Notat,      // Текст записи
-        Wr,         // Кто сделал запись
-        MoodWr      // Настроение
+        Id_Note = 1,    // Id
+        Date_Note,      // Дата и время
+        notation_Note,  // Текст записи
+        writer_Note,    // Кто сделал запись
+        mood_Note       // Настроение
     }
 
     /// <summary>
@@ -57,8 +57,8 @@ namespace Diary {
 
             for (i = 0; i < count; ++i) {
                 if (this.notes[i].Id_Note == id) {
-                    this.notes[i].Notation = newNotation;
-                    this.notes[i].WhatMood = newWhatMood;
+                    this.notes[i].Notation_Note = newNotation;
+                    this.notes[i].Mood_Note = newWhatMood;
                     return;
                 }
             }
@@ -138,83 +138,105 @@ namespace Diary {
         ///////////////////////////////////////СОРТИРОВКА//////////////////////////////////////////
 
         /// <summary>
+        /// Сортирует массив notes по значению одного из свойств класса Note
+        /// </summary>
+        /// <param name="piNote">Свойство класса Note</param>
+        private void sortByPropValue(string propName) {
+            for (int i = 0; i < this.count; ++i) {
+                for (int j = 0; j < this.count - 1; ++j) {
+                    var propNote = notes[j].GetType().GetProperty(propName).GetValue(notes[j]);
+                    //if (String.Compare( piNote.GetValue(notes[j]),
+                    //                    piNote.GetValue(notes[j + 1]),
+                    //                    true)) {
+                    //    Note tmpNote = notes[j];
+                    //    notes[j] = notes[j + 1];
+                    //    notes[j + 1] = tmpNote;
+                    //}
+
+                    //var propNote = piNote.GetValue(notes[j]);
+                }
+            }
+        }
+
+        /// <summary>
         /// Сортирует ежедневник
         /// </summary>
         /// <param name="fn">Поле по которому сортировать</param>
-        public void sortNotes(FieldsNote fn = FieldsNote.DateT) {
+        public void sortNotes(FieldsNote fn = FieldsNote.Date_Note) {
             if (count > 1) {
                 switch (fn) {
-                    case FieldsNote.Id:
-                        
-                        for (int i = 0; i < this.count; ++i) {
-                            for (int j = 0; j < this.count - 1; ++j) {
-                                PropertyInfo pi = notes[j].GetType().GetProperty("Id_Note");
-                                if (notes[j].Id_Note > notes[j + 1].Id_Note) {
-                                    Note tmpNote = notes[j];
-                                    notes[j] = notes[j + 1];
-                                    notes[j + 1] = tmpNote;
-                                }
-                            }
-                        }
+                    case FieldsNote.Id_Note:
+                        sortByPropValue("Id_Note");
+                        //for (int i = 0; i < this.count; ++i) {
+                        //    for (int j = 0; j < this.count - 1; ++j) {
+                        //        //var propNote = notes[j].GetType().GetProperty("Id_Note").GetValue(notes[j]);
+                        //        var propNote = 
+                        //        if (notes[j].Id_Note > notes[j + 1].Id_Note) {
+                        //            Note tmpNote = notes[j];
+                        //            notes[j] = notes[j + 1];
+                        //            notes[j + 1] = tmpNote;
+                        //        }
+                        //    }
+                        //}
 
                         break;
 
-                    case FieldsNote.MoodWr:
-                        for (int i = 0; i < this.count; ++i) {
-                            for (int j = 0; j < this.count - 1; ++j) {
-                                if (notes[j].WhatMood > notes[j + 1].WhatMood) {
-                                    Note tmpNote = notes[j];
-                                    notes[j] = notes[j + 1];
-                                    notes[j + 1] = tmpNote;
-                                }
-                            }
-                        }
+                    //case FieldsNote.MoodWr:
+                    //    for (int i = 0; i < this.count; ++i) {
+                    //        for (int j = 0; j < this.count - 1; ++j) {
+                    //            if (notes[j].Mood_Note > notes[j + 1].Mood_Note) {
+                    //                Note tmpNote = notes[j];
+                    //                notes[j] = notes[j + 1];
+                    //                notes[j + 1] = tmpNote;
+                    //            }
+                    //        }
+                    //    }
 
-                        break;
+                    //    break;
 
-                    case FieldsNote.DateT:
-                        for (int i = 0; i < this.count; ++i) {
-                            for (int j = 0; j < this.count - 1; ++j) {
-                                if (notes[j].Datetime_Note > notes[j + 1].Datetime_Note) {
-                                    Note tmpNote = notes[j];
-                                    notes[j] = notes[j + 1];
-                                    notes[j + 1] = tmpNote;
-                                }
-                            }
-                        }
+                    //case FieldsNote.DateT:
+                    //    for (int i = 0; i < this.count; ++i) {
+                    //        for (int j = 0; j < this.count - 1; ++j) {
+                    //            if (notes[j].Date_Note > notes[j + 1].Date_Note) {
+                    //                Note tmpNote = notes[j];
+                    //                notes[j] = notes[j + 1];
+                    //                notes[j + 1] = tmpNote;
+                    //            }
+                    //        }
+                    //    }
 
-                        break;
+                    //    break;
 
-                    case FieldsNote.Notat:
-                        for (int i = 0; i < this.count; ++i) {
-                            for (int j = 0; j < this.count - 1; ++j) {
-                                if (String.Compare(notes[j].Notation,
-                                                    notes[j + 1].Notation, true) == 1) {
+                    //case FieldsNote.Notat:
+                    //    for (int i = 0; i < this.count; ++i) {
+                    //        for (int j = 0; j < this.count - 1; ++j) {
+                    //            if (String.Compare(notes[j].Notation_Note,
+                    //                                notes[j + 1].Notation_Note, true) == 1) {
 
-                                    Note tmpNote = notes[j];
-                                    notes[j] = notes[j + 1];
-                                    notes[j + 1] = tmpNote;
-                                }
-                            }
-                        }
+                    //                Note tmpNote = notes[j];
+                    //                notes[j] = notes[j + 1];
+                    //                notes[j + 1] = tmpNote;
+                    //            }
+                    //        }
+                    //    }
 
-                        break;
+                    //    break;
 
-                    case FieldsNote.Wr:
-                        for (int i = 0; i < this.count; ++i) {
-                            for (int j = 0; j < this.count - 1; ++j) {
-                                if (String.Compare(notes[j].Writer.stringForSort(),
-                                                    notes[j + 1].Writer.stringForSort(),
-                                                    true) == 1) {
+                    //case FieldsNote.Wr:
+                    //    for (int i = 0; i < this.count; ++i) {
+                    //        for (int j = 0; j < this.count - 1; ++j) {
+                    //            if (String.Compare(notes[j].Writer_Note.stringForSort(),
+                    //                                notes[j + 1].Writer_Note.stringForSort(),
+                    //                                true) == 1) {
 
-                                    Note tmpNote = notes[j];
-                                    notes[j] = notes[j + 1];
-                                    notes[j + 1] = tmpNote;
-                                }
-                            }
-                        }
+                    //                Note tmpNote = notes[j];
+                    //                notes[j] = notes[j + 1];
+                    //                notes[j + 1] = tmpNote;
+                    //            }
+                    //        }
+                    //    }
 
-                        break;
+                    //    break;
 
                 }
             }
