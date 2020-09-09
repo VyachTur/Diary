@@ -9,9 +9,9 @@ namespace Diary {
 	/// Перечисление реализующее настроение
 	/// </summary>
 	enum Mood {
-		Great = 1,		// отличное
-		Good,			// хорошее
-		Bad				// плохое
+		GREAT = 1,		// ОТЛИЧНОЕ
+		GOOD,			// ХОРОШЕЕ
+		BAD				// ПЛОХОЕ
 	}
 
 	/// <summary>
@@ -99,14 +99,14 @@ namespace Diary {
 		/// </summary>
 		/// <param name="Notation">Текст записи</param>
 		/// <param name="Writer">Пользователь создающий запись</param>
-		public Note(string notation, Person writer) : this(notation, writer, Mood.Great) { }
+		public Note(string notation, Person writer) : this(notation, writer, Mood.GREAT) { }
 
         /// <summary>
         /// Редактирование записи (в записи после создания можно изменять только текст записи (Notation) и настроение (WhatMood)
         /// </summary>
         /// <param name="newNotation">Новая измененная запись</param>
-        /// <param name="newWhatMood">Новое настроение (по умолчанию хорошее(Great))</param>
-        public void editNote(string newNotation, Mood newMood = Mood.Good) {
+        /// <param name="newWhatMood">Новое настроение (по умолчанию хорошее(GREAT))</param>
+        public void editNote(string newNotation, Mood newMood = Mood.GOOD) {
             // Если запись финализирована, то поменять ее не получится
             this.notation_Note = newNotation;
             this.mood_Note = newMood;

@@ -27,7 +27,7 @@ namespace Diary {
 
     class Program {
 		static void Main(string[] args) {
-			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.Bad);
+			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.BAD);
 			oneNote.editNote("Измененная запись");
 
 			Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
@@ -43,12 +43,12 @@ namespace Diary {
 								new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
 							  );
 
-            notes.editNotes(2, "Дополнительно измененная запись", Mood.Great);      // редактирование записи в ежедневнике
+            notes.editNotes(2, "Дополнительно измененная запись", Mood.GREAT);      // редактирование записи в ежедневнике
             //Note fourNote = new Note();
             notes.deleteNotes(twoNote);   // удаление записи из ежедневника
 
             //notes.sortNotes(FieldsNote.MoodWr);
-            notes.sortNotes(FieldsNote.Id);
+            notes.sortNotes(FieldsNote.WRITER_NOTE);
 
             //for (int i = 1; i <= notes.Count; ++i) {
             //    Console.WriteLine(notes.getNoteForId((uint)i).prntNote());

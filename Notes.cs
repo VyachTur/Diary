@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Diary {
     enum FieldsNote {
-        Id_Note = 1,    // Id
-        Date_Note,      // Дата и время
-        notation_Note,  // Текст записи
-        writer_Note,    // Кто сделал запись
-        mood_Note       // Настроение
+        ID_NOTE = 1,    // ID
+        DATE_NOTE,      // ДАТА И ВРЕМЯ
+        NOTATION_NOTE,  // ТЕКСТ ЗАПИСИ
+        WRITER_NOTE,    // КТО СДЕЛАЛ ЗАПИСЬ
+        MOOD_NOTE       // НАСТРОЕНИЕ
     }
 
     /// <summary>
@@ -52,7 +52,7 @@ namespace Diary {
             count = args.Length;    // меняем значение количества элементов в массиве-ежедневнике
         }
 
-        public void editNotes(uint id, string newNotation, Mood newWhatMood = Mood.Good) {
+        public void editNotes(uint id, string newNotation, Mood newWhatMood = Mood.GOOD) {
             int i;
 
             for (i = 0; i < count; ++i) {
@@ -136,24 +136,97 @@ namespace Diary {
 
 
         ///////////////////////////////////////СОРТИРОВКА//////////////////////////////////////////
+        /// <summary>
+        /// Меняет местами объекты Note
+        /// </summary>
+        /// <param name="n1">Первый объект Note</param>
+        /// <param name="n2">Второй объект Note</param>
+        private static void swapNotes(ref Note oneNote, ref Note twoNote) {
+            Note tmpNote = oneNote;
+            oneNote = twoNote;
+            twoNote = tmpNote;
+        }
+
+        private static bool isGreaterOneNote(ref Note oneNote, ref Note twoNote, string fieldNote) {
+            // Переменные для сравнения строковых значений полей
+            string fieldStrVal1 = String.Empty;
+            string fieldStrVal2 = String.Empty;
+
+            // Получение значений свойств объектов
+            if (fieldNote == "Notation_Note") {
+                //fieldVal1 = oneNote.GetType().GetProperty(fildNote).GetValue(oneNote).ToString();
+                //fieldVal2 = twoNote.GetType().GetProperty(fildNote).GetValue(twoNote).ToString();
+                fieldStrVal1 = oneNote.Notation_Note;
+                fieldStrVal2 = twoNote.Notation_Note;
+
+            } else if (fieldNote == "Writer_Note") {
+                fieldStrVal1 = oneNote.Writer_Note.personToString();
+                fieldStrVal2 = twoNote.Writer_Note.personToString();
+
+            }
+            // Если значение свойства первого объекта больше, то возвращаем true
+            if (String.Compare(fieldStrVal1, fieldStrVal2, true) == 1) return true;
+
+
+            ////////////////////////////СРАВНЕНИЕ СВОЙСТВ Mood_Note, Id_Note, Date_Note///////////////////////////
+            if (fieldNote == "Mood_Note") {
+                uint fieldMoodVal1 = (uint)oneNote.Mood_Note;
+                uint fieldMoodVal2 = (uint)twoNote.Mood_Note;
+
+                return fieldMoodVal1 > fieldMoodVal2;
+            }
+            
+            if (fieldNote == "Id_Note") {
+                uint fieldIdVal1 = oneNote.Id_Note;
+                uint fieldIdVal2 = twoNote.Id_Note;
+
+                return fieldIdVal1 > fieldIdVal2;
+            }
+
+            if (fieldNote == "Date_Note") {
+                DateTime fieldDTVal1 = oneNote.Date_Note;
+                DateTime fieldDTVal2 = twoNote.Date_Note;
+
+                return fieldDTVal1 > fieldDTVal2;
+            }
+            //////////////////////КОНЕЦ_СРАВНЕНИЕ СВОЙСТВ Mood_Note, Id_Note, Date_Note//////////////////////////////
+            
+
+            return false;   // в остальных случаях возвращаем false
+        }
 
         /// <summary>
         /// Сортирует массив notes по значению одного из свойств класса Note
         /// </summary>
         /// <param name="piNote">Свойство класса Note</param>
-        private void sortByPropValue(string propName) {
-            for (int i = 0; i < this.count; ++i) {
-                for (int j = 0; j < this.count - 1; ++j) {
-                    var propNote = notes[j].GetType().GetProperty(propName).GetValue(notes[j]);
-                    //if (String.Compare( piNote.GetValue(notes[j]),
-                    //                    piNote.GetValue(notes[j + 1]),
-                    //                    true)) {
-                    //    Note tmpNote = notes[j];
-                    //    notes[j] = notes[j + 1];
-                    //    notes[j + 1] = tmpNote;
-                    //}
+        private void sortByPropValue(FieldsNote fNote = FieldsNote.DATE_NOTE) {
+            // Если сортируем по свойствам Notation_Note, Writer_Note
+            if (fNote == FieldsNote.NOTATION_NOTE || fNote == FieldsNote.WRITER_NOTE) {
+                for (int i = 0; i < this.count; ++i) {
+                    for (int j = 0; j < this.count - 1; ++j) {
+                        if (isGreaterOneNote(ref notes[j], ref notes[j + 1], fNote.ToString())) {
+                            swapNotes(ref notes[j], ref notes[j + 1]);
+                        }
 
-                    //var propNote = piNote.GetValue(notes[j]);
+                        //if (String.Compare( piNote.GetValue(notes[j]),
+                        //                    piNote.GetValue(notes[j + 1]),
+                        //                    true)) {
+                        //    Note tmpNote = notes[j];
+                        //    notes[j] = notes[j + 1];
+                        //    notes[j + 1] = tmpNote;
+                        //}
+
+                        //var propNote = piNote.GetValue(notes[j]);
+                    }
+                }
+            }
+            else {    // если сортируем по свойствам Id_Note, Date_Note, mood_Note
+                for (int i = 0; i < this.count; ++i) {
+                    for (int j = 0; j < this.count - 1; ++j) {
+                        var propNote = notes[j].GetType().GetProperty(fNote.ToString()).GetValue(notes[j]);
+                    
+                    
+                    }
                 }
             }
         }
@@ -162,11 +235,12 @@ namespace Diary {
         /// Сортирует ежедневник
         /// </summary>
         /// <param name="fn">Поле по которому сортировать</param>
-        public void sortNotes(FieldsNote fn = FieldsNote.Date_Note) {
+        public void sortNotes(FieldsNote fn = FieldsNote.DATE_NOTE) {
+            sortByPropValue(fn);
             if (count > 1) {
                 switch (fn) {
-                    case FieldsNote.Id_Note:
-                        sortByPropValue("Id_Note");
+                    case FieldsNote.ID_NOTE:
+                        
                         //for (int i = 0; i < this.count; ++i) {
                         //    for (int j = 0; j < this.count - 1; ++j) {
                         //        //var propNote = notes[j].GetType().GetProperty("Id_Note").GetValue(notes[j]);
@@ -225,8 +299,8 @@ namespace Diary {
                     //case FieldsNote.Wr:
                     //    for (int i = 0; i < this.count; ++i) {
                     //        for (int j = 0; j < this.count - 1; ++j) {
-                    //            if (String.Compare(notes[j].Writer_Note.stringForSort(),
-                    //                                notes[j + 1].Writer_Note.stringForSort(),
+                    //            if (String.Compare(notes[j].Writer_Note.personToString(),
+                    //                                notes[j + 1].Writer_Note.personToString(),
                     //                                true) == 1) {
 
                     //                Note tmpNote = notes[j];

@@ -74,7 +74,7 @@ namespace Diary {
 		/// Вспомогательный метод для сортировки в массиве из объектов Person
 		/// </summary>
 		/// <returns>Строка для сортировки</returns>
-		public string stringForSort() {
+		public string personToString() {
 			return this.Family + this.Name + this.Sirname + this.BirthDate.ToShortDateString();
         }
 
