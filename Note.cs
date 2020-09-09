@@ -119,11 +119,11 @@ namespace Diary {
         public string prntNote() {
 			// Возвращаем данные в записи, если они есть
 			if (!String.IsNullOrEmpty(notation_Note)) {
-				return $"ID: {this.id_Note}\n" +
+				return  $"ID:            {this.id_Note}\n" +
 						$"DateTime Note: {this.date_Note}\n" +
-						$"Notation: {this.notation_Note}\n" +
-						$"Writer: {this.writer_Note.prntPerson()}\n" +
-						$"Mood: {this.mood_Note}\n";
+						$"Notation:      {this.notation_Note}\n" +
+						$"Writer:        {this.writer_Note.prntPerson()}\n" +
+						$"Mood:          {this.mood_Note}\n";
 			}
 
 			return String.Empty;	// если данных в записи нет, то возвращаем пустую строку

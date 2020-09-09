@@ -28,43 +28,37 @@ namespace Diary {
     class Program {
 		static void Main(string[] args) {
 			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.BAD);
-			oneNote.editNote("Измененная запись");
-
-            Console.ReadKey();
 
             Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
 
-            Console.ReadKey();
-
             Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
 
-            Console.ReadKey();
+            Notes notes1 = new Notes(oneNote, twoNote);  // ежедневник
 
-            Notes notes = new Notes(oneNote, twoNote);
+            notes1.insertNotes(threeNote);   // добавляем запись в ежедневник
 
-            notes.insertNotes(threeNote);   // добавляем запись в ежедневник
-
-            notes.insertNotes(	new Note("Четвертая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
+            notes1.insertNotes(	new Note("Четвертая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
 								new Note("Пятая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
 								new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
 							  );
 
-            notes.editNotes(2, "Дополнительно измененная запись", Mood.GREAT);      // редактирование записи в ежедневнике
-            //Note fourNote = new Note();
-            notes.deleteNotes(twoNote);   // удаление записи из ежедневника
+            notes1.editNotes(3, "Дополнительно измененная запись", Mood.GREAT);      // редактирование записи в ежедневнике
 
-            //notes.sortNotes(FieldsNote.MoodWr);
-            notes.sortNotes(FieldsNote.DATE_NOTE);
+            notes1.deleteNotes(twoNote);   // удаление записи из ежедневника
 
-            //for (int i = 1; i <= notes.Count; ++i) {
-            //    Console.WriteLine(notes.getNoteForId((uint)i).prntNote());
-            //}
+            notes1.sortNotes(FieldsNote.ID_NOTE, Order.DESC);    // сортировка ежедневника по полю Id_Note в по убыванию
 
-            for (int i = 0; i < notes.Count; ++i) {
-                Console.WriteLine(notes[i].prntNote());
-            }
+            notes1.unloadNotes(@"C:\123.diary");    // Вывод ежедневника в файл
 
-            Console.WriteLine(notes.Count);
-		}
+            Console.WriteLine($"Количество записей в первом ежедневнике - {notes1.Count}");
+            Console.WriteLine();
+
+            Notes notes2 = new Notes();
+            
+
+
+            Console.WriteLine($"Количество записей во втором ежедневнике - {notes2.Count}");
+            Console.WriteLine();
+        }
 	}
 }

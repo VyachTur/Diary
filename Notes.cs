@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,12 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Diary {
+    /// <summary>
+    /// Поля класса Note (вспомогательное перечисление,
+    /// для ограничения выбора полей в методах isGreaterOneNote и sortNotes)
+    /// </summary>
     enum FieldsNote {
         ID_NOTE = 1,    // ID
         DATE_NOTE,      // ДАТА И ВРЕМЯ
         NOTATION_NOTE,  // ТЕКСТ ЗАПИСИ
         WRITER_NOTE,    // КТО СДЕЛАЛ ЗАПИСЬ
         MOOD_NOTE       // НАСТРОЕНИЕ
+    }
+
+    /// <summary>
+    /// Порядок сортировки
+    /// </summary>
+    enum Order {
+        ASC,    // ПРЯМОЙ (ПО ВОЗРАСТАНИЮ)
+        DESC    // ОБРАТНЫЙ (ПО УБЫВАНИЮ)
     }
 
     /// <summary>
@@ -153,16 +166,15 @@ namespace Diary {
         /// <param name="oneNote">Первый объект сравнения</param>
         /// <param name="twoNote">Второй объект сравнения</param>
         /// <param name="fn">Поле по которому происходит сравнение</param>
+        /// <param name="order">Порядок сортировки (по возрастанию, по убыванию)</param>
         /// <returns>true - если oneNote > twoNote</returns>
-        private static bool isGreaterOneNote(ref Note oneNote, ref Note twoNote, FieldsNote fn) {
+        private static bool isGreaterOneNote(ref Note oneNote, ref Note twoNote, FieldsNote fn, Order order) {
             // Переменные для сравнения строковых значений полей
             string fieldStrVal1 = String.Empty;
             string fieldStrVal2 = String.Empty;
 
             // Получение значений свойств объектов
             if (fn == FieldsNote.NOTATION_NOTE) {
-                //fieldVal1 = oneNote.GetType().GetProperty(fildNote).GetValue(oneNote).ToString();
-                //fieldVal2 = twoNote.GetType().GetProperty(fildNote).GetValue(twoNote).ToString();
                 fieldStrVal1 = oneNote.Notation_Note;
                 fieldStrVal2 = twoNote.Notation_Note;
 
@@ -171,8 +183,12 @@ namespace Diary {
                 fieldStrVal2 = twoNote.Writer_Note.personToString();
 
             }
-            // Если значение свойства первого объекта больше, то возвращаем true
-            if (String.Compare(fieldStrVal1, fieldStrVal2, true) == 1) return true;
+            // Если порядок сортировки прямой
+            if (order == Order.ASC) {
+                if (String.Compare(fieldStrVal1, fieldStrVal2, true) == 1) return true;
+            } else {    // если порядок сортировки обратный
+                if (String.Compare(fieldStrVal1, fieldStrVal2, true) == -1) return true;
+            }
 
 
             ////////////////////////////СРАВНЕНИЕ СВОЙСТВ Mood_Note, Id_Note, Date_Note///////////////////////////
@@ -180,21 +196,27 @@ namespace Diary {
                 uint fieldMoodVal1 = (uint)oneNote.Mood_Note;
                 uint fieldMoodVal2 = (uint)twoNote.Mood_Note;
 
-                return fieldMoodVal1 > fieldMoodVal2;
+                // если порядок сортировки прямой
+                if (order == Order.ASC) return fieldMoodVal1 > fieldMoodVal2;
+                else return fieldMoodVal1 < fieldMoodVal2; // если порядок обратный
             }
             
             if (fn == FieldsNote.ID_NOTE) {
                 uint fieldIdVal1 = oneNote.Id_Note;
                 uint fieldIdVal2 = twoNote.Id_Note;
 
-                return fieldIdVal1 > fieldIdVal2;
+                // если порядок сортировки прямой
+                if (order == Order.ASC) return fieldIdVal1 > fieldIdVal2;
+                else return fieldIdVal1 < fieldIdVal2;  // если порядок обратный
             }
 
             if (fn == FieldsNote.DATE_NOTE) {
                 DateTime fieldDTVal1 = oneNote.Date_Note;
                 DateTime fieldDTVal2 = twoNote.Date_Note;
 
-                return fieldDTVal1 < fieldDTVal2;
+                // если порядок сортировки прямой
+                if (order == Order.ASC) return fieldDTVal1 > fieldDTVal2;
+                else return fieldDTVal1 < fieldDTVal2;  // если порядок обратный
             }
             //////////////////////КОНЕЦ_СРАВНЕНИЕ СВОЙСТВ Mood_Note, Id_Note, Date_Note//////////////////////////////
             
@@ -205,11 +227,12 @@ namespace Diary {
         /// <summary>
         /// Сортирует массив notes по значению одного из свойств класса Note
         /// </summary>
-        /// <param name="piNote">Свойство класса Note</param>
-        public void sortNotes(FieldsNote fNote = FieldsNote.DATE_NOTE) {
+        /// <param name="fNote">"Псевдоним" свойства класса Note</param>
+        /// <param name="order">Порядок сортировки</param>
+        public void sortNotes(FieldsNote fNote = FieldsNote.DATE_NOTE, Order order = Order.ASC) {
             for (int i = 0; i < this.count; ++i) {
                 for (int j = 0; j < this.count - 1; ++j) {
-                    if (isGreaterOneNote(ref notes[j], ref notes[j + 1], fNote)) {
+                    if (isGreaterOneNote(ref notes[j], ref notes[j + 1], fNote, order)) {
                         swapNotes(ref notes[j], ref notes[j + 1]);
                     }
                 }
@@ -221,8 +244,8 @@ namespace Diary {
 
         // МЕТОДЫ ДЛЯ РАБОТЫ С ФАЙЛАМИ
 
-        // - Загрузка данных из файла
-        // - Выгрузка данных в файл
+        // - Загрузка данных из файла 
+        // - Выгрузка данных в файл +
         // - Добавления данных в текущий ежедневник из выбранного файла
         // - Импорт записей по выбранному диапазону дат
 
@@ -233,12 +256,23 @@ namespace Diary {
         /// </summary>
         /// <param name="path">Путь к файлу-ежедневнику</param>
         public void loadNotes(string path) {
+            //if (!File.Exists(path)) {
+            //    Console.WriteLine("Файла не существует!");
+            //    return;
+            //}
 
+            //StreamReader sr = new StreamReader(path);
+            //string line;
+            
+            //while ((line = sr.ReadLine()) != null) {
+
+            //    this.insertNotes();
+            //}
         }
 
         /// <summary>
         /// Перегруженный метод, загружает данные в ежедневник из файла 
-        /// (если в ежедневнике есть файлы, то происходит добавление, добавление происходит в диапазоне дат)
+        /// (если в ежедневнике есть записи, то происходит добавление, добавление происходит в диапазоне дат)
         /// </summary>
         /// <param name="path">Путь к файлу-ежедневнику</param>
         public void loadNotes(string path, DateTime from, DateTime to) {
@@ -249,9 +283,22 @@ namespace Diary {
         /// Выгружает данные из ежедневника в файл
         /// </summary>
         /// <param name="path">Путь к файлу-ежедневнику</param>
-        public void unloadNotes(string path) {
+        public void unloadNotes(string path = "") {
+            // Если путь к файлу не передан, либо не верен, то создаем его в директории exe-файла
+            if (!File.Exists(path)) {
+                path = Directory.GetCurrentDirectory() + "\\Diary.diary";
+            }
 
+            StreamWriter sw = new StreamWriter(path);    // создание потока для работы с файлом по пути path
+
+            foreach (Note note in notes) {
+                sw.WriteLine(note.prntNote());
+            }
+
+            sw.Flush();
+            sw.Close();
         }
+
 
         #endregion  // Constructors and Methods
 
