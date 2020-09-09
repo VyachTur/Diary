@@ -30,9 +30,15 @@ namespace Diary {
 			Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.BAD);
 			oneNote.editNote("Измененная запись");
 
-			Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
+            Console.ReadKey();
+
+            Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
+
+            Console.ReadKey();
 
             Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
+
+            Console.ReadKey();
 
             Notes notes = new Notes(oneNote, twoNote);
 
@@ -48,7 +54,7 @@ namespace Diary {
             notes.deleteNotes(twoNote);   // удаление записи из ежедневника
 
             //notes.sortNotes(FieldsNote.MoodWr);
-            notes.sortNotes(FieldsNote.WRITER_NOTE);
+            notes.sortNotes(FieldsNote.DATE_NOTE);
 
             //for (int i = 1; i <= notes.Count; ++i) {
             //    Console.WriteLine(notes.getNoteForId((uint)i).prntNote());

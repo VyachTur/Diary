@@ -147,19 +147,26 @@ namespace Diary {
             twoNote = tmpNote;
         }
 
-        private static bool isGreaterOneNote(ref Note oneNote, ref Note twoNote, string fieldNote) {
+        /// <summary>
+        /// Определяет больше ли первый объект второго
+        /// </summary>
+        /// <param name="oneNote">Первый объект сравнения</param>
+        /// <param name="twoNote">Второй объект сравнения</param>
+        /// <param name="fn">Поле по которому происходит сравнение</param>
+        /// <returns>true - если oneNote > twoNote</returns>
+        private static bool isGreaterOneNote(ref Note oneNote, ref Note twoNote, FieldsNote fn) {
             // Переменные для сравнения строковых значений полей
             string fieldStrVal1 = String.Empty;
             string fieldStrVal2 = String.Empty;
 
             // Получение значений свойств объектов
-            if (fieldNote == "Notation_Note") {
+            if (fn == FieldsNote.NOTATION_NOTE) {
                 //fieldVal1 = oneNote.GetType().GetProperty(fildNote).GetValue(oneNote).ToString();
                 //fieldVal2 = twoNote.GetType().GetProperty(fildNote).GetValue(twoNote).ToString();
                 fieldStrVal1 = oneNote.Notation_Note;
                 fieldStrVal2 = twoNote.Notation_Note;
 
-            } else if (fieldNote == "Writer_Note") {
+            } else if (fn == FieldsNote.WRITER_NOTE) {
                 fieldStrVal1 = oneNote.Writer_Note.personToString();
                 fieldStrVal2 = twoNote.Writer_Note.personToString();
 
@@ -169,25 +176,25 @@ namespace Diary {
 
 
             ////////////////////////////СРАВНЕНИЕ СВОЙСТВ Mood_Note, Id_Note, Date_Note///////////////////////////
-            if (fieldNote == "Mood_Note") {
+            if (fn == FieldsNote.MOOD_NOTE) {
                 uint fieldMoodVal1 = (uint)oneNote.Mood_Note;
                 uint fieldMoodVal2 = (uint)twoNote.Mood_Note;
 
                 return fieldMoodVal1 > fieldMoodVal2;
             }
             
-            if (fieldNote == "Id_Note") {
+            if (fn == FieldsNote.ID_NOTE) {
                 uint fieldIdVal1 = oneNote.Id_Note;
                 uint fieldIdVal2 = twoNote.Id_Note;
 
                 return fieldIdVal1 > fieldIdVal2;
             }
 
-            if (fieldNote == "Date_Note") {
+            if (fn == FieldsNote.DATE_NOTE) {
                 DateTime fieldDTVal1 = oneNote.Date_Note;
                 DateTime fieldDTVal2 = twoNote.Date_Note;
 
-                return fieldDTVal1 > fieldDTVal2;
+                return fieldDTVal1 < fieldDTVal2;
             }
             //////////////////////КОНЕЦ_СРАВНЕНИЕ СВОЙСТВ Mood_Note, Id_Note, Date_Note//////////////////////////////
             
@@ -199,119 +206,12 @@ namespace Diary {
         /// Сортирует массив notes по значению одного из свойств класса Note
         /// </summary>
         /// <param name="piNote">Свойство класса Note</param>
-        private void sortByPropValue(FieldsNote fNote = FieldsNote.DATE_NOTE) {
-            // Если сортируем по свойствам Notation_Note, Writer_Note
-            if (fNote == FieldsNote.NOTATION_NOTE || fNote == FieldsNote.WRITER_NOTE) {
-                for (int i = 0; i < this.count; ++i) {
-                    for (int j = 0; j < this.count - 1; ++j) {
-                        if (isGreaterOneNote(ref notes[j], ref notes[j + 1], fNote.ToString())) {
-                            swapNotes(ref notes[j], ref notes[j + 1]);
-                        }
-
-                        //if (String.Compare( piNote.GetValue(notes[j]),
-                        //                    piNote.GetValue(notes[j + 1]),
-                        //                    true)) {
-                        //    Note tmpNote = notes[j];
-                        //    notes[j] = notes[j + 1];
-                        //    notes[j + 1] = tmpNote;
-                        //}
-
-                        //var propNote = piNote.GetValue(notes[j]);
+        public void sortNotes(FieldsNote fNote = FieldsNote.DATE_NOTE) {
+            for (int i = 0; i < this.count; ++i) {
+                for (int j = 0; j < this.count - 1; ++j) {
+                    if (isGreaterOneNote(ref notes[j], ref notes[j + 1], fNote)) {
+                        swapNotes(ref notes[j], ref notes[j + 1]);
                     }
-                }
-            }
-            else {    // если сортируем по свойствам Id_Note, Date_Note, mood_Note
-                for (int i = 0; i < this.count; ++i) {
-                    for (int j = 0; j < this.count - 1; ++j) {
-                        var propNote = notes[j].GetType().GetProperty(fNote.ToString()).GetValue(notes[j]);
-                    
-                    
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Сортирует ежедневник
-        /// </summary>
-        /// <param name="fn">Поле по которому сортировать</param>
-        public void sortNotes(FieldsNote fn = FieldsNote.DATE_NOTE) {
-            sortByPropValue(fn);
-            if (count > 1) {
-                switch (fn) {
-                    case FieldsNote.ID_NOTE:
-                        
-                        //for (int i = 0; i < this.count; ++i) {
-                        //    for (int j = 0; j < this.count - 1; ++j) {
-                        //        //var propNote = notes[j].GetType().GetProperty("Id_Note").GetValue(notes[j]);
-                        //        var propNote = 
-                        //        if (notes[j].Id_Note > notes[j + 1].Id_Note) {
-                        //            Note tmpNote = notes[j];
-                        //            notes[j] = notes[j + 1];
-                        //            notes[j + 1] = tmpNote;
-                        //        }
-                        //    }
-                        //}
-
-                        break;
-
-                    //case FieldsNote.MoodWr:
-                    //    for (int i = 0; i < this.count; ++i) {
-                    //        for (int j = 0; j < this.count - 1; ++j) {
-                    //            if (notes[j].Mood_Note > notes[j + 1].Mood_Note) {
-                    //                Note tmpNote = notes[j];
-                    //                notes[j] = notes[j + 1];
-                    //                notes[j + 1] = tmpNote;
-                    //            }
-                    //        }
-                    //    }
-
-                    //    break;
-
-                    //case FieldsNote.DateT:
-                    //    for (int i = 0; i < this.count; ++i) {
-                    //        for (int j = 0; j < this.count - 1; ++j) {
-                    //            if (notes[j].Date_Note > notes[j + 1].Date_Note) {
-                    //                Note tmpNote = notes[j];
-                    //                notes[j] = notes[j + 1];
-                    //                notes[j + 1] = tmpNote;
-                    //            }
-                    //        }
-                    //    }
-
-                    //    break;
-
-                    //case FieldsNote.Notat:
-                    //    for (int i = 0; i < this.count; ++i) {
-                    //        for (int j = 0; j < this.count - 1; ++j) {
-                    //            if (String.Compare(notes[j].Notation_Note,
-                    //                                notes[j + 1].Notation_Note, true) == 1) {
-
-                    //                Note tmpNote = notes[j];
-                    //                notes[j] = notes[j + 1];
-                    //                notes[j + 1] = tmpNote;
-                    //            }
-                    //        }
-                    //    }
-
-                    //    break;
-
-                    //case FieldsNote.Wr:
-                    //    for (int i = 0; i < this.count; ++i) {
-                    //        for (int j = 0; j < this.count - 1; ++j) {
-                    //            if (String.Compare(notes[j].Writer_Note.personToString(),
-                    //                                notes[j + 1].Writer_Note.personToString(),
-                    //                                true) == 1) {
-
-                    //                Note tmpNote = notes[j];
-                    //                notes[j] = notes[j + 1];
-                    //                notes[j + 1] = tmpNote;
-                    //            }
-                    //        }
-                    //    }
-
-                    //    break;
-
                 }
             }
         }
