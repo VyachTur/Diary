@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.CodeDom;
 
 namespace Diary {
     /// <summary>
@@ -256,18 +257,30 @@ namespace Diary {
         /// </summary>
         /// <param name="path">Путь к файлу-ежедневнику</param>
         public void loadNotes(string path) {
-            //if (!File.Exists(path)) {
-            //    Console.WriteLine("Файла не существует!");
-            //    return;
-            //}
+            if (!File.Exists(path) || (path.IndexOf(".diary") != path.Length - 6)) {
+                Console.WriteLine("Файла не существует, либо не является ежедневником!");
+                return;
+            }
 
-            //StreamReader sr = new StreamReader(path);
-            //string line;
-            
-            //while ((line = sr.ReadLine()) != null) {
+            StreamReader sr = new StreamReader(path);   // поток для чтения данных из файла
+            string line;                // текущая строка считанная из файла
+            Note note = new Note();     // вспомогательный объект записи для формирования ежедневника
 
-            //    this.insertNotes();
-            //}
+            while ((line = sr.ReadLine()) != null) {
+                if (line.IndexOf("ID:") == 0) note.Id_Note = uint.Parse(line.Substring(15));
+                if (line.IndexOf("DateTime Note:") == 0) note.Date_Note = DateTime.Parse(line.Substring(15));
+                if (line.IndexOf("Notation:") == 0) note.Notation_Note = line.Substring(15);
+                if (line.IndexOf("Writer:") == 0) note.Writer_Note = Person.stringToPerson(line.Substring(15));
+                if (line.IndexOf("Mood:") == 0) {
+                    if (line.Substring(15) == "BAD") note.Mood_Note = Mood.BAD;
+                    else if (line.Substring(15) == "GOOD") note.Mood_Note = Mood.GOOD;
+                    else note.Mood_Note = Mood.GREAT;
+                }
+
+                if (String.IsNullOrEmpty(line)) {
+                    this.insertNotes(note);
+                }
+            }
         }
 
         /// <summary>
@@ -285,9 +298,11 @@ namespace Diary {
         /// <param name="path">Путь к файлу-ежедневнику</param>
         public void unloadNotes(string path = "") {
             // Если путь к файлу не передан, либо не верен, то создаем его в директории exe-файла
-            if (!File.Exists(path)) {
+            if (path == "") {
                 path = Directory.GetCurrentDirectory() + "\\Diary.diary";
             }
+
+            if (notes == null) return;
 
             StreamWriter sw = new StreamWriter(path);    // создание потока для работы с файлом по пути path
 

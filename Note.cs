@@ -43,12 +43,19 @@ namespace Diary {
 		/// </summary>
 		public uint Id_Note {
 			get { return this.id_Note; }
+			set {
+				// Если присв. Id больше последнего Id созданного объекта Note,
+				// то присваиваем следующее Id (следующее за Id последнего созданного объекта)
+				if (value > countNotes) this.id_Note = value;
+				else this.id_Note = ++countNotes;
+            }
         }
 		/// <summary>
 		/// Дата и время создания записи
 		/// </summary>
 		public DateTime Date_Note {
 			get { return this.date_Note; }
+			set { this.date_Note = value; }
 		}
 
 		/// <summary>
@@ -63,6 +70,7 @@ namespace Diary {
 		/// </summary>
 		public Person Writer_Note {
 			get { return this.writer_Note; }
+			set { this.writer_Note = value; }
 		}
 
 		/// <summary>
