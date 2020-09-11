@@ -79,7 +79,7 @@ namespace Diary {
         }
 
 		/// <summary>
-		/// Преобразование строки формата возвращаемого методом prntPerson в объект Person
+		/// Преобразование СТРОКИ формата возвращаемого методом prntPerson в объект Person
 		/// </summary>
 		/// <param name="person">Строка в формате метода prntPerson</param>
 		/// <returns></returns>
