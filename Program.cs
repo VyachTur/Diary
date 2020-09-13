@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Xml.Serialization;
 
 namespace Diary {
@@ -48,17 +49,15 @@ namespace Diary {
                     Console.WriteLine("========================================================");
                     Console.WriteLine("4 - Загрузить данные из файла;");
                     Console.WriteLine("5 - Выгрузить данные в файл;");
-                    Console.WriteLine("6 - Добавление данных в текущий ежедневник из файла;");
-                    Console.WriteLine("7 - Импорт записей из файла по выбранному диапазону дат;");
-                    Console.WriteLine("8 - Упорядочить записи в ежедневнике по выбранному полю;");
+                    Console.WriteLine("6 - Упорядочить записи в ежедневнике по выбранному полю;");
                     Console.WriteLine("========================================================");
-                    Console.WriteLine("9 - Выйти из программы.");
+                    Console.WriteLine("7 - Выйти из программы.");
                     Console.WriteLine("========================================================");
                     Console.WriteLine();
 
                     Console.Write("Выберите пункт: ");
                     int.TryParse(Console.ReadLine(), out choice);
-                } while (choice < 1 || choice > 9);
+                } while (choice < 1 || choice > 7);
 
                 Console.Clear();
 
@@ -193,26 +192,99 @@ namespace Diary {
 
                     case 4: // выбран пункт "Загрузить данные из файла"
 
+                        Console.Write("Введите путь к файлу для загрузки данных в ежедневник: ");
+                        string path = Console.ReadLine();
 
-                        break;
+                        Console.Write("Загрузить данные по диапазону дат? (д/н): ");
+                        string ch = Console.ReadLine();
+                        Console.WriteLine();
+
+                        if (ch == "д") {
+                            DateTime from, to;  // для обозначения промежутка дат
+                            Console.Write("Загружаем с (дата в формате дд.мм.гггг чч:ММ:сс):  ");
+                            DateTime.TryParse(Console.ReadLine(), out from);
+                            Console.Write("Загружаем по (дата в формате дд.мм.гггг чч:ММ:сс): ");
+                            DateTime.TryParse(Console.ReadLine(), out to);
+
+                            notes.loadNotes(path, from, to);
+
+                        } else {
+                            notes.loadNotes(path);
+                        }
+
+                        continue;
 
                     case 5: // выбран пункт "Выгрузить данные в файл"
 
-                        break;
+                        // если запсей в ежедневнике нет, то переходим к следующей итерации цикла
+                        if (!notes.prntNotes()) {
+                            continue;
+                        }
 
-                    case 6: // выбран пункт "Добавление данных из файла"
+                        Console.WriteLine();
+                        Console.Write("Введите путь к файлу ежедневника (по умолчанию создастся файл Diary.diary в директории программы): ");
+                        path = Console.ReadLine();
+                        notes.unloadNotes(path);
 
-                        break;
+                        continue;
 
-                    case 7: // выбран пункт "Импорт из файла по диапазону дат"
+                    case 6: // выбран пункт "Упорядочить записи"
 
-                        break;
+                        int chFie;  // выбор поля сортировки
 
-                    case 8: // выбран пункт "Упорядочить записи"
+                        do {
+                            Console.Clear();
+                            Console.WriteLine("=============================");
+                            Console.WriteLine("Поля записи:");
+                            Console.WriteLine("=============================");
+                            Console.WriteLine("1 - Идентификатор записи;");
+                            Console.WriteLine("2 - Дата создания записи;");
+                            Console.WriteLine("3 - Текст записи;");
+                            Console.WriteLine("4 - Создатель записи;");
+                            Console.WriteLine("5 - Настроение;");
+                            Console.WriteLine("=============================");
+                            Console.WriteLine();
 
-                        break;
+                            Console.Write("Выберите поле по которому будем сортировать: ");
+                            int.TryParse(Console.ReadLine(), out chFie);
+                        } while (chFie < 1 || chFie > 5);
 
-                    case 9: // выбран пункт "Выйти"
+                        Console.Write("Отсортировать в обратном порядке? (д/н): ");
+                        string chOrd = Console.ReadLine();
+
+                        FieldsNote field = FieldsNote.DATE_NOTE;   // поле по которому будем сортировать (по умолчанию - дата создания записи)
+                        Order order;
+
+                        if (chOrd == "д") order = Order.DESC;
+                        else order = Order.ASC;
+
+                        switch (chFie) {
+                            case 1: // сортировка по Id
+                                field = FieldsNote.ID_NOTE;
+                                break;
+
+                            case 2: // сортировка по дате создания
+                                field = FieldsNote.DATE_NOTE;
+                                break;
+                            case 3: // сортировка по тексту записи
+                                field = FieldsNote.NOTATION_NOTE;
+                                break;
+                            case 4: // сортировка по создателю записи
+                                field = FieldsNote.WRITER_NOTE;
+                                break;
+                            case 5: // сортировка по настроению
+                                field = FieldsNote.MOOD_NOTE;
+                                break;
+
+                            case 6: // вернуться в главное меню
+                                continue;
+                        }
+
+                        notes.sortNotes(field, order);
+
+                        continue;
+
+                    case 7: // выбран пункт "Выйти"
                         return;
                 }
 
@@ -247,96 +319,16 @@ namespace Diary {
             Console.Clear();
         }
 
+
+        /// <summary>
+        /// ГЛАВНЫЙ МЕТОД (точка входа программы
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args) {
             //Console.ReadKey();
-            //titleAnimation("<<<ЕЖЕДНЕВНИК>>>", ConsoleColor.Cyan);
+            titleAnimation("<<<ЕЖЕДНЕВНИК>>>", ConsoleColor.Cyan);
 
             Menu();
-
-
-
-            //Note oneNote = new Note("Первая пробная запись", new Person("Иванов", "Иван"), Mood.BAD);
-
-            //Console.WriteLine("Нажмите клавишу...");
-            //Console.ReadKey();  // задержка для формирования промежутка времени создания
-            //                    // для проверки импорта по диапазону дат в записях
-
-            //Note twoNote = new Note("Вторая пробная запись", new Person("Павлов", "Павел", "Павлович", new DateTime(1986, 7, 1)));
-
-            //Console.WriteLine("Нажмите клавишу...");
-            //Console.ReadKey();  // задержка для формирования промежутка времени создания
-            //                    // для проверки импорта по диапазону дат в записях
-
-            //Note threeNote = new Note("Третья пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)));
-
-            //Console.WriteLine("Нажмите клавишу...");
-            //Console.ReadKey();  // задержка для формирования промежутка времени создания
-            //                    // для проверки импорта по диапазону дат в записях
-
-            //// СОЗДАНИЕ ЕЖЕДНЕВНИКА
-            //////////////////////////////////////////////////////////////////////////////
-            //Notes notes1 = new Notes(oneNote, twoNote);
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-
-            //notes1.insertNotes(threeNote);   // добавляем запись в ежедневник
-
-            //// Пример добавления массива записей (можно раскомментировать для тестирования)
-            ////Console.WriteLine("Нажмите клавишу...");
-            ////Console.ReadKey();  // задержка для формирования промежутка времени создания в записях
-
-            ////notes1.insertNotes(new Note("Четвертая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
-            ////                    new Note("Пятая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1))),
-            ////                    new Note("Шестая пробная запись", new Person("Петров", "Петр", "Петрович", new DateTime(2000, 1, 1)))
-            ////                  );
-
-            //// РЕДАКТИРОВАНИЕ ЗАПИСИ В ЕЖЕДНЕВНИКЕ
-            //////////////////////////////////////////////////////////////////////////////
-            //notes1.editNotes(3, "Дополнительно измененная запись", Mood.GREAT);
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-            //// УДАЛЕНИЕ ЗАПИСИ twoNote ИЗ ЕЖЕДНЕВНИКА
-            //////////////////////////////////////////////////////////////////////////////
-            //notes1.deleteNotes(twoNote);
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-            //// СОРТИРОВКА ЕЖЕДНЕВНИКА ПО ПОЛЮ Id_Note ПО УБЫВАНИЮ
-            //////////////////////////////////////////////////////////////////////////////
-            //notes1.sortNotes(FieldsNote.ID_NOTE, Order.DESC);
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-            //Console.WriteLine($"Количество записей в созданном ежедневнике - {notes1.Count}");
-
-            //// ВЫГРУЗКА ЕЖЕДНЕВНИКА В ФАЙЛ
-            //////////////////////////////////////////////////////////////////////////////
-            //notes1.unloadNotes(@"C:\1\out.diary");
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-            //// ДОБАВЛЕНИЕ ДАННЫХ В ЕЖЕДНЕВНИК ИЗ ФАЙЛА (+ ЗАГРУЗКА ДАННЫХ ИЗ ФАЙЛА)
-            //////////////////////////////////////////////////////////////////////////////
-            //notes1.loadNotes(@"C:\1\out.diary");    // количество записей удвоится, т.к. файл
-            //                                        // загружается тот в который ранее выгружали
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-            //// ЗАГРУЗКА ДАННЫХ ПО ВЫБРАННОМУ ДИАПАЗОНУ ДАТ
-            //////////////////////////////////////////////////////////////////////////////
-            //notes1.loadNotes(@"C:\1\out.diary", DateTime.Now.AddSeconds(-4), DateTime.Now);
-            //////////////////////////////////////////////////////////////////////////////
-            /////
-
-            //notes1.unloadNotes(@"C:\1\out_SECOND.diary");
-
-
-            //Console.WriteLine($"Количество записей в ежедневнике после добавления из файла - {notes1.Count}");
-
-
-            //Console.WriteLine();
 
         }
     }

@@ -281,6 +281,7 @@ namespace Diary {
         ////////////////////////////////////КОНЕЦ_СОРТИРОВКА///////////////////////////////////////
 
 
+
         // МЕТОДЫ ДЛЯ РАБОТЫ С ФАЙЛАМИ
 
         // - Загрузка данных из файла +
@@ -328,6 +329,8 @@ namespace Diary {
                     this.insertNotes(note); // добавляем запись в ежедневник
                 }
             }
+
+            sr.Close();
         }
 
         /// <summary>
@@ -340,7 +343,13 @@ namespace Diary {
                 path = Directory.GetCurrentDirectory() + "\\Diary.diary";
             }
 
+            if (path.IndexOf(".diary") != path.Length - 6) {
+                Console.WriteLine("Расширение файла должно быть \".diary\"!");
+                return;
+            }
+
             if (notes == null) return;
+
 
             StreamWriter sw = new StreamWriter(path);    // создание потока для работы с файлом по пути path
 

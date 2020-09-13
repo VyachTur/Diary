@@ -50,8 +50,12 @@ namespace Diary {
 			set {
 				// Если присв. Id больше последнего Id созданного объекта Note,
 				// то присваиваем следующее Id (следующее за Id последнего созданного объекта)
-				if (value > countNotes) this.id_Note = value;
-				else this.id_Note = ++countNotes;
+				if (value > countNotes) {
+					this.id_Note = value;
+					countNotes = value;
+				} else {
+					this.id_Note = ++countNotes;
+				}
             }
         }
 		/// <summary>
