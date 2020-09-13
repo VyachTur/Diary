@@ -50,7 +50,7 @@ namespace Diary {
 
         // Индексатор get-only (index - id записи, начинается с 1
         public Note this[uint index] {
-            get { return notes[index - 1]; }
+            get { return notes[index]; }
         }
 
         #region Constructors and Methods
@@ -126,7 +126,7 @@ namespace Diary {
         /// <param name="id">ID записи (свойство Id_Note, начинаются с 1)</param>
         public void deleteNotes(uint id) {
             // id записи не может быть < 1
-            if (id > 0 && id < this.count) {
+            if (id > 0 && id <= Note.CountNotes) {
                 Note[] notesTmp = new Note[this.count - 1];
                 int i = 0;  // счетчик для индекса массива notesTmp
 
@@ -157,7 +157,32 @@ namespace Diary {
                     } 
                 }
             }
+        }
 
+
+        /// <summary>
+        /// Вывод на экран консоли основных данных записей в ежедневнике
+        /// </summary>
+        public bool prntNotes() {
+            if (this.Count == 0) {
+                Console.WriteLine("В ежедневнике нет записей.");
+                Console.ReadKey();
+                return false;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Идентификатор записи    Настроение    Текст записи");
+            Console.ResetColor();
+
+            foreach (Note note in this.notes) {
+                string strMood = "хорошее"; // настроение возвращаемое по умолчанию
+                if (note.Mood_Note == Mood.BAD) strMood = "плохое";
+                else if (note.Mood_Note == Mood.GREAT) strMood = "отличное";
+
+                Console.WriteLine($"{note.Id_Note,20}    {strMood,10}    {note.Notation_Note}");
+            }
+
+            return true;
         }
 
 
@@ -325,32 +350,6 @@ namespace Diary {
 
             sw.Flush();
             sw.Close();
-        }
-
-
-        /// <summary>
-        /// Вывод на экран консоли основных данных записей в ежедневнике
-        /// </summary>
-        public bool prntNotes() {
-            if (this.Count == 0) {
-                Console.WriteLine("Нет записей в ежедневнике!");
-                Console.ReadKey();
-                return false;
-            }
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("Идентификатор записи    Настроение    Текст записи");
-            Console.ResetColor();
-
-            foreach (Note note in this.notes) {
-                string strMood = "хорошее"; // настроение возвращаемое по умолчанию
-                if (note.Mood_Note == Mood.BAD) strMood = "плохое";
-                else if (note.Mood_Note == Mood.GREAT) strMood = "отличное";
-
-                Console.WriteLine($"{note.Id_Note, 20}    {strMood, 10}    {note.Notation_Note}");
-            }
-
-            return true;
         }
 
 

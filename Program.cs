@@ -27,7 +27,7 @@ namespace Diary {
         // Идентификаторы записей (Id_Note) должны быть различны (в рамках одной программы).
         // Для этого при загрузке записей из файла ежедневника с совпадающими идентификаторами
         // они будут меняться (для исключения совпадения идентификаторов).
-        
+
         /// <summary>
         /// Вывод главного меню программы
         /// </summary>
@@ -63,7 +63,10 @@ namespace Diary {
                 Console.Clear();
 
                 switch (choice) {
-                    case 1:
+                    case 1: // выбран пункт "Добавить запись"
+
+                        notes.prntNotes();  // выводим ежедневник (если есть записи)
+                        Console.Clear();
 
                         string whatFamily, whatName, whatSirname;
                         DateTime whatBirthDate;
@@ -109,7 +112,8 @@ namespace Diary {
 
                         continue;
 
-                    case 2:
+                    case 2: // выбран пункт "Редактировать запись"
+
                         // если запсей в ежедневнике нет, то переходим к следующей итерации цикла
                         if (!notes.prntNotes()) {
                             continue;
@@ -118,7 +122,6 @@ namespace Diary {
                         uint id;    // хранит идентификатор записи
                         do {
                             Console.WriteLine();
-                            //Console.Clear();
                             Console.Write("Введите номер идентификатора редактируемой записи (буква, или 0 - выход в меню): ");
                             uint.TryParse(Console.ReadLine(), out id);
                             if (id == 0) break;
@@ -134,7 +137,7 @@ namespace Diary {
                         if (id == 0) continue;  // пользователь выбрал выход, выводим меню
 
                         Console.Clear();
-                        whatMood = notes[id].Mood_Note;
+                        whatMood = notes.getNoteForId(id).Mood_Note;
                         Console.Write("Настроение(плохое, хорошее, отличное): ");
                         strMood = Console.ReadLine();
                         if (!String.IsNullOrEmpty(strMood)) {
@@ -145,7 +148,7 @@ namespace Diary {
                         Console.Write("Сделайте запись: ");
                         whatNotation = Console.ReadLine();
                         // Если пользователь ввел пустое поле, то не меняем текст записи
-                        if (String.IsNullOrEmpty(whatNotation)) whatNotation = notes[id].Notation_Note;
+                        if (String.IsNullOrEmpty(whatNotation)) whatNotation = notes.getNoteForId(id).Notation_Note;
                        
                         notes.editNotes(id, whatNotation, whatMood);    // редактируем запись
 
@@ -153,33 +156,63 @@ namespace Diary {
                         notes.prntNotes();
 
                         Console.ReadKey();
+
                         continue;
 
-                    case 3:
+                    case 3: // выбран пункт "Удалить запись"
+
+                        // если запсей в ежедневнике нет, то переходим к следующей итерации цикла
+                        if (!notes.prntNotes()) {
+                            continue;
+                        }
+
+                        do {
+                            Console.WriteLine();
+                            Console.Write("Введите номер идентификатора удаляемой записи (буква, или 0 - выход в меню): ");
+                            uint.TryParse(Console.ReadLine(), out id);
+                            if (id == 0) break;
+
+                            if (!notes.isNoteId(id)) {
+                                Console.WriteLine("Записи с таким идентификатором не существует!");
+                                continue;
+                            }
+
+                            break;
+                        } while (true);
+
+                        if (id == 0) continue;  // пользователь выбрал выход, выводим меню
+
+                        notes.deleteNotes(id);  // удаляем запись
+
+                        Console.Clear();
+                        notes.prntNotes();
+
+                        Console.ReadKey();
+
+                        continue;
+
+                    case 4: // выбран пункт "Загрузить данные из файла"
+
 
                         break;
 
-                    case 4:
+                    case 5: // выбран пункт "Выгрузить данные в файл"
 
                         break;
 
-                    case 5:
+                    case 6: // выбран пункт "Добавление данных из файла"
 
                         break;
 
-                    case 6:
+                    case 7: // выбран пункт "Импорт из файла по диапазону дат"
 
                         break;
 
-                    case 7:
+                    case 8: // выбран пункт "Упорядочить записи"
 
                         break;
 
-                    case 8:
-
-                        break;
-
-                    case 9:
+                    case 9: // выбран пункт "Выйти"
                         return;
                 }
 

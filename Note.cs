@@ -38,6 +38,10 @@ namespace Diary {
 
 		// Свойства и автосвойства
 
+		public static uint CountNotes {
+			get { return Note.countNotes; }
+        }
+
 		/// <summary>
 		/// Id записи
 		/// </summary>
