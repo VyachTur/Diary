@@ -48,9 +48,9 @@ namespace Diary {
             get { return count; }
         }
 
-        // Индексатор get-only
-        public Note this[int index] {
-            get { return notes[index]; }
+        // Индексатор get-only (index - id записи, начинается с 1
+        public Note this[uint index] {
+            get { return notes[index - 1]; }
         }
 
         #region Constructors and Methods
@@ -64,6 +64,19 @@ namespace Diary {
         public Notes(params Note[] args) {
             notes = args;
             count = args.Length;    // меняем значение количества элементов в массиве-ежедневнике
+        }
+
+        /// <summary>
+        /// Проверяет существует ли id записи
+        /// </summary>
+        /// <param name="id">Идентификатор для проверки</param>
+        /// <returns>true - запись с таким id существует, false - не существует</returns>
+        public bool isNoteId(uint id) {
+            foreach (Note note in this.notes) {
+                if (note.Id_Note == id) return true;
+            }
+
+            return false;
         }
 
         public void editNotes(uint id, string newNotation, Mood newWhatMood = Mood.GOOD) {
@@ -312,6 +325,32 @@ namespace Diary {
 
             sw.Flush();
             sw.Close();
+        }
+
+
+        /// <summary>
+        /// Вывод на экран консоли основных данных записей в ежедневнике
+        /// </summary>
+        public bool prntNotes() {
+            if (this.Count == 0) {
+                Console.WriteLine("Нет записей в ежедневнике!");
+                Console.ReadKey();
+                return false;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Идентификатор записи    Настроение    Текст записи");
+            Console.ResetColor();
+
+            foreach (Note note in this.notes) {
+                string strMood = "хорошее"; // настроение возвращаемое по умолчанию
+                if (note.Mood_Note == Mood.BAD) strMood = "плохое";
+                else if (note.Mood_Note == Mood.GREAT) strMood = "отличное";
+
+                Console.WriteLine($"{note.Id_Note, 20}    {strMood, 10}    {note.Notation_Note}");
+            }
+
+            return true;
         }
 
 

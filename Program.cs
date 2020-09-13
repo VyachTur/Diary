@@ -42,7 +42,7 @@ namespace Diary {
                     Console.WriteLine("========================================================");
                     Console.WriteLine("                    ГЛАВНОЕ МЕНЮ:");
                     Console.WriteLine("========================================================");
-                    Console.WriteLine("1 - Создать ежедневник;");
+                    Console.WriteLine("1 - Добавить запись в ежедневник;");
                     Console.WriteLine("2 - Редактировать запись в ежедневнике;");
                     Console.WriteLine("3 - Удалить запись из ежедневника;");
                     Console.WriteLine("========================================================");
@@ -64,67 +64,96 @@ namespace Diary {
 
                 switch (choice) {
                     case 1:
-                        Console.Write("Хотите добавить запись в ежедневник? (д/н) ");
-                        string ch = Console.ReadLine();
 
-                        if (ch == "д") {
-                            Console.Clear();
+                        string whatFamily, whatName, whatSirname;
+                        DateTime whatBirthDate;
+                        string whatNotation;
+                        Mood whatMood = Mood.GOOD;      // по умолчанию настроение хорошее
 
-                            string whatFamily, whatName, whatSirname;
-                            DateTime whatBirthDate;
-                            string whatNotation;
-                            Mood whatMood = Mood.GOOD;      // по умолчанию настроение хорошее
+                        Console.Write("Фамилия: ");
+                        whatFamily = Console.ReadLine();
+                        Console.Write("Имя: ");
+                        whatName = Console.ReadLine();
+                        Console.Write("Отчество: ");
+                        whatSirname = Console.ReadLine();
 
-                            Console.Write("Фамилия: ");
-                            whatFamily = Console.ReadLine();
-                            Console.Write("Имя: ");
-                            whatName = Console.ReadLine();
-                            Console.Write("Отчество: ");
-                            whatSirname = Console.ReadLine();
+                        string sBDay;   // вспомогательная переменная для конвертации в дату
+                        do {
+                            Console.Write("Дата рождения (формат - дд.мм.гггг): ");
+                            sBDay = Console.ReadLine();
+                            if (!DateTime.TryParse(sBDay, out whatBirthDate)) {
+                                continue; // если дата рождения не является датой, то повторяем ввод
+                            }
+                            else {
+                                break;  // если дата рождения корректна (является датой) то выходим из цикла
+                            }
+                        } while (true);
 
-                            string sBDay;   // вспомогательная переменная для конвертации в дату
-                            do {
-                                Console.Write("Дата рождения (формат - дд.мм.гггг): ");
-                                sBDay = Console.ReadLine();
-                                if (!DateTime.TryParse(sBDay, out whatBirthDate)) {
-                                    continue; // если дата рождения не является датой, то повторяем ввод
-                                }
-                                else {
-                                    break;  // если дата рождения корректна (является датой) то выходим из цикла
-                                }
-                            } while (true);
+                        // Создатель записи
+                        Person whatPerson = new Person(whatFamily, whatName, whatSirname, whatBirthDate);
 
-                            // Создатель записи
-                            Person whatPerson = new Person(whatFamily, whatName, whatSirname, whatBirthDate);
+                        Console.Clear();
 
-                            //Console.WriteLine("Для продолжения нажмите любую клавишу...");
-                            //Console.ReadKey();
-                            Console.Clear();
+                        Console.Write("Напишите о настроении(плохое, хорошее, отличное): ");
+                        string strMood = Console.ReadLine();
+                        if (strMood == "плохое") whatMood = Mood.BAD;
+                        else if (strMood == "отличное") whatMood = Mood.GREAT;
 
-                            Console.Write("Напишите о настроении(плохое, хорошее, отличное): ");
-                            string strMood = Console.ReadLine();
-                            if (strMood == "плохое") whatMood = Mood.BAD;
-                            else if (strMood == "отличное") whatMood = Mood.GREAT;
+                        Console.Clear();
 
-                            //Console.WriteLine("Для продолжения нажмите любую клавишу...");
-                            //Console.ReadKey();
-                            Console.Clear();
+                        Console.Write("Сделайте запись: ");
+                        whatNotation = Console.ReadLine();
 
-                            Console.Write("Сделайте запись: ");
-                            whatNotation = Console.ReadLine();
+                        Note note = new Note(whatNotation, whatPerson, whatMood);
+                        notes.insertNotes(note);
 
-                            Note note = new Note(whatNotation, whatPerson, whatMood);
-                            notes.insertNotes(note);
-
-                            continue;
-                        }
-                        else {
-                            continue;
-                        }
+                        continue;
 
                     case 2:
+                        // если запсей в ежедневнике нет, то переходим к следующей итерации цикла
+                        if (!notes.prntNotes()) {
+                            continue;
+                        }
 
-                        break;
+                        uint id;    // хранит идентификатор записи
+                        do {
+                            Console.WriteLine();
+                            //Console.Clear();
+                            Console.Write("Введите номер идентификатора редактируемой записи (буква, или 0 - выход в меню): ");
+                            uint.TryParse(Console.ReadLine(), out id);
+                            if (id == 0) break;
+
+                            if (!notes.isNoteId(id)) {
+                                Console.WriteLine("Записи с таким идентификатором не существует!");
+                                continue;
+                            }
+
+                            break;
+                        } while (true);
+
+                        if (id == 0) continue;  // пользователь выбрал выход, выводим меню
+
+                        Console.Clear();
+                        whatMood = notes[id].Mood_Note;
+                        Console.Write("Настроение(плохое, хорошее, отличное): ");
+                        strMood = Console.ReadLine();
+                        if (!String.IsNullOrEmpty(strMood)) {
+                            if (strMood == "плохое") whatMood = Mood.BAD;
+                            else if (strMood == "отличное") whatMood = Mood.GREAT;
+                        }
+
+                        Console.Write("Сделайте запись: ");
+                        whatNotation = Console.ReadLine();
+                        // Если пользователь ввел пустое поле, то не меняем текст записи
+                        if (String.IsNullOrEmpty(whatNotation)) whatNotation = notes[id].Notation_Note;
+                       
+                        notes.editNotes(id, whatNotation, whatMood);    // редактируем запись
+
+                        Console.Clear();
+                        notes.prntNotes();
+
+                        Console.ReadKey();
+                        continue;
 
                     case 3:
 
@@ -186,8 +215,8 @@ namespace Diary {
         }
 
         static void Main(string[] args) {
-            Console.ReadKey();
-            titleAnimation("<<<ЕЖЕДНЕВНИК>>>", ConsoleColor.Cyan);
+            //Console.ReadKey();
+            //titleAnimation("<<<ЕЖЕДНЕВНИК>>>", ConsoleColor.Cyan);
 
             Menu();
 
