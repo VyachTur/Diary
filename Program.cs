@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Xml.Serialization;
 
 namespace Diary {
@@ -32,72 +33,138 @@ namespace Diary {
         /// </summary>
         static public void Menu() {
             int choice = 0;
-            do {
+            Notes notes = new Notes();   // создание пустого ежедневника
+
+            do {    // бесконечный цикл (до выхода пользователя из программы)
+
+                do {
+                    Console.Clear();
+                    Console.WriteLine("========================================================");
+                    Console.WriteLine("                    ГЛАВНОЕ МЕНЮ:");
+                    Console.WriteLine("========================================================");
+                    Console.WriteLine("1 - Создать ежедневник;");
+                    Console.WriteLine("2 - Редактировать запись в ежедневнике;");
+                    Console.WriteLine("3 - Удалить запись из ежедневника;");
+                    Console.WriteLine("========================================================");
+                    Console.WriteLine("4 - Загрузить данные из файла;");
+                    Console.WriteLine("5 - Выгрузить данные в файл;");
+                    Console.WriteLine("6 - Добавление данных в текущий ежедневник из файла;");
+                    Console.WriteLine("7 - Импорт записей из файла по выбранному диапазону дат;");
+                    Console.WriteLine("8 - Упорядочить записи в ежедневнике по выбранному полю;");
+                    Console.WriteLine("========================================================");
+                    Console.WriteLine("9 - Выйти из программы.");
+                    Console.WriteLine("========================================================");
+                    Console.WriteLine();
+
+                    Console.Write("Выберите пункт: ");
+                    int.TryParse(Console.ReadLine(), out choice);
+                } while (choice < 1 || choice > 9);
+
                 Console.Clear();
-                Console.WriteLine("========================================================");
-                Console.WriteLine("                    ГЛАВНОЕ МЕНЮ:");
-                Console.WriteLine("========================================================");
-                Console.WriteLine("1 - создать ежедневник;");
-                Console.WriteLine("2 - редактировать запись в ежедневнике;");
-                Console.WriteLine("3 - удалить запись из ежедневника;");
-                Console.WriteLine("========================================================");
-                Console.WriteLine("4 - загрузить данные из файла;");
-                Console.WriteLine("5 - выгрузить данные в файл;");
-                Console.WriteLine("6 - добавление данных в текущий ежедневник из файла;");
-                Console.WriteLine("7 - импорт записей из файла по выбранному диапазону дат;");
-                Console.WriteLine("8 - упорядочить записи в ежедневнике по выбранному полю;");
-                Console.WriteLine("========================================================");
-                Console.WriteLine("9 - выйти из программы.");
-                Console.WriteLine("========================================================");
-                Console.WriteLine();
 
-                Console.Write("Выберите пункт: ");
-                int.TryParse(Console.ReadLine(), out choice);
-            } while (choice < 1 || choice > 9);
+                switch (choice) {
+                    case 1:
+                        Console.Write("Хотите добавить запись в ежедневник? (д/н) ");
+                        string ch = Console.ReadLine();
 
-            switch (choice) {
-                case 1:
+                        if (ch == "д") {
+                            Console.Clear();
 
-                    break;
+                            string whatFamily, whatName, whatSirname;
+                            DateTime whatBirthDate;
+                            string whatNotation;
+                            Mood whatMood = Mood.GOOD;      // по умолчанию настроение хорошее
 
-                case 2:
+                            Console.Write("Фамилия: ");
+                            whatFamily = Console.ReadLine();
+                            Console.Write("Имя: ");
+                            whatName = Console.ReadLine();
+                            Console.Write("Отчество: ");
+                            whatSirname = Console.ReadLine();
 
-                    break;
+                            string sBDay;   // вспомогательная переменная для конвертации в дату
+                            do {
+                                Console.Write("Дата рождения (формат - дд.мм.гггг): ");
+                                sBDay = Console.ReadLine();
+                                if (!DateTime.TryParse(sBDay, out whatBirthDate)) {
+                                    continue; // если дата рождения не является датой, то повторяем ввод
+                                }
+                                else {
+                                    break;  // если дата рождения корректна (является датой) то выходим из цикла
+                                }
+                            } while (true);
 
-                case 3:
+                            // Создатель записи
+                            Person whatPerson = new Person(whatFamily, whatName, whatSirname, whatBirthDate);
 
-                    break;
+                            //Console.WriteLine("Для продолжения нажмите любую клавишу...");
+                            //Console.ReadKey();
+                            Console.Clear();
 
-                case 4:
+                            Console.Write("Напишите о настроении(плохое, хорошее, отличное): ");
+                            string strMood = Console.ReadLine();
+                            if (strMood == "плохое") whatMood = Mood.BAD;
+                            else if (strMood == "отличное") whatMood = Mood.GREAT;
 
-                    break;
+                            //Console.WriteLine("Для продолжения нажмите любую клавишу...");
+                            //Console.ReadKey();
+                            Console.Clear();
 
-                case 5:
+                            Console.Write("Сделайте запись: ");
+                            whatNotation = Console.ReadLine();
 
-                    break;
+                            Note note = new Note(whatNotation, whatPerson, whatMood);
+                            notes.insertNotes(note);
 
-                case 6:
+                            continue;
+                        }
+                        else {
+                            continue;
+                        }
 
-                    break;
+                    case 2:
 
-                case 7:
+                        break;
 
-                    break;
+                    case 3:
 
-                case 8:
+                        break;
 
-                    break;
+                    case 4:
 
-                case 9:
-                    return;
-            }
+                        break;
+
+                    case 5:
+
+                        break;
+
+                    case 6:
+
+                        break;
+
+                    case 7:
+
+                        break;
+
+                    case 8:
+
+                        break;
+
+                    case 9:
+                        return;
+                }
+
+            } while (true);
         }
 
-        static void Main(string[] args) {
-
-            Console.SetCursorPosition(Console.WindowWidth/2 - 8, Console.WindowHeight/2 - 1);
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            string logo = "<<<ЕЖЕДНЕВНИК>>>";
+        /// <summary>
+        /// Метод отображающий в консоли анимацию заголовка
+        /// </summary>
+        /// <param name="title">Текст заголовка</param>
+        static public void titleAnimation(string title, ConsoleColor color = ConsoleColor.Green) {
+            string logo = title;
+            Console.SetCursorPosition(Console.WindowWidth / 2 - logo.Length/2, Console.WindowHeight / 2 - 1);
+            Console.ForegroundColor = color;
 
             foreach (char ch in logo) {
                 Console.Write(ch);
@@ -105,17 +172,22 @@ namespace Diary {
             }
             System.Threading.Thread.Sleep(400);
 
-            int j = 100;
-            for (int i = 0; i < 5; ++i) {
-                Console.Clear();
-                Console.SetCursorPosition(Console.WindowWidth / 2 - 8, Console.WindowHeight / 2 - 1);
-                System.Threading.Thread.Sleep(j);
+            for (int i = 0; i < 100; i += 10) {
+                
+                Console.SetCursorPosition(Console.WindowWidth / 2 - logo.Length / 2, Console.WindowHeight / 2 - 1);
+                
                 Console.Write(logo);
-                j -= 20;
+                System.Threading.Thread.Sleep(100 - i);
+                Console.Clear();
             }
 
             Console.ResetColor();
             Console.Clear();
+        }
+
+        static void Main(string[] args) {
+            Console.ReadKey();
+            titleAnimation("<<<ЕЖЕДНЕВНИК>>>", ConsoleColor.Cyan);
 
             Menu();
 
