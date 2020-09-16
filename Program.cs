@@ -142,6 +142,7 @@ namespace Diary {
                         if (!String.IsNullOrEmpty(strMood)) {
                             if (strMood == "плохое") whatMood = Mood.BAD;
                             else if (strMood == "отличное") whatMood = Mood.GREAT;
+                            else whatMood = Mood.GOOD;
                         }
 
                         Console.Write("Сделайте запись: ");
@@ -325,7 +326,7 @@ namespace Diary {
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args) {
-            Console.ReadLine();
+            //Console.ReadLine();
             titleAnimation("<<<ЕЖЕДНЕВНИК>>>", ConsoleColor.Cyan);
 
             Menu();
