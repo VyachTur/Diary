@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Xml.Serialization;
 
 namespace Diary {
 
@@ -300,6 +297,7 @@ namespace Diary {
             string logo = title;
             Console.SetCursorPosition(Console.WindowWidth / 2 - logo.Length/2, Console.WindowHeight / 2 - 1);
             Console.ForegroundColor = color;
+            Console.CursorVisible = false;
 
             foreach (char ch in logo) {
                 Console.Write(ch);
@@ -318,6 +316,7 @@ namespace Diary {
 
             Console.ResetColor();
             Console.Clear();
+            Console.CursorVisible = true;
         }
 
 
